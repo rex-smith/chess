@@ -8,26 +8,26 @@ class Piece
   
 end
 
-class Pawn << Piece
+class Pawn < Piece
 
 end
 
-class Rook << Piece
+class Rook < Piece
 
 end
 
-class Knight << Piece
+class Knight < Piece
 
 end
 
-class Bishop << Piece
+class Bishop < Piece
   
 end
 
-class Queen << Piece
+class Queen < Piece
 
 end
 
-class King << Piece
+class King < Piece
 
 end
