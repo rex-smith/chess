@@ -23,7 +23,7 @@ class WhitePawn < Piece
   # Add initial move feature later
   # Add en passant later
 
-  MOVES = [[0, 1], [-1, 1], [1, 1]].freeze
+  MOVES = [[0, -1], [-1, -1], [1, -1]].freeze
 
   def possibleMoves
     move_array = []
@@ -35,7 +35,7 @@ class WhitePawn < Piece
 end
 
 class BlackPawn < Piece
-  MOVES = [[0, -1], [-1, -1], [1, -1]].freeze
+  MOVES = [[0, 1], [-1, 1], [1, 1]].freeze
 
   def possibleMoves
 

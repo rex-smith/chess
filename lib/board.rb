@@ -12,7 +12,7 @@ class Board
   attr_reader :active_player
 
   def displayBoard
-    @board.reverse.each_with_index do |row, index|
+    @board.each_with_index do |row, index|
       print "#{-1*(index-8)} "
       row.each do |piece|
         if piece == ' '

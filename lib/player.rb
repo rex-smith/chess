@@ -14,42 +14,42 @@ class Player
     if color == 'white'
       @pieces = 
       {
-        pawn1: WhitePawn.new('a2', "\u2659", 'white'),
-        pawn2: WhitePawn.new('b2', "\u2659", 'white'),
-        pawn3: WhitePawn.new('c2', "\u2659", 'white'),
-        pawn4: WhitePawn.new('d2', "\u2659", 'white'),
-        pawn5: WhitePawn.new('e2', "\u2659", 'white'),
-        pawn6: WhitePawn.new('f2', "\u2659", 'white'),
-        pawn7: WhitePawn.new('g2', "\u2659", 'white'),
-        pawn8: WhitePawn.new('h2', "\u2659", 'white'),
-        rook1: Rook.new('a1', "\u2656", 'white'),
-        rook2: Rook.new('h1', "\u2656", 'white'),
-        knight1: Knight.new('g1', "\u2658", 'white'),
-        knight2: Knight.new('b1', "\u2658", 'white'),
-        bishop1: Bishop.new('c1', "\u2657", 'white'),
-        bishop2: Bishop.new('f1', "\u2657", 'white'),
-        queen: Queen.new('d1', "\u2655", 'white'),
-        king: King.new('e1', "\u2654", 'white')
+        pawn1: WhitePawn.new('a2', "\u265f", 'white'),
+        pawn2: WhitePawn.new('b2', "\u265f", 'white'),
+        pawn3: WhitePawn.new('c2', "\u265f", 'white'),
+        pawn4: WhitePawn.new('d2', "\u265f", 'white'),
+        pawn5: WhitePawn.new('e2', "\u265f", 'white'),
+        pawn6: WhitePawn.new('f2', "\u265f", 'white'),
+        pawn7: WhitePawn.new('g2', "\u265f", 'white'),
+        pawn8: WhitePawn.new('h2', "\u265f", 'white'),
+        rook1: Rook.new('a1', "\u265c", 'white'),
+        rook2: Rook.new('h1', "\u265c", 'white'),
+        knight1: Knight.new('g1', "\u265e", 'white'),
+        knight2: Knight.new('b1', "\u265e", 'white'),
+        bishop1: Bishop.new('c1', "\u265d", 'white'),
+        bishop2: Bishop.new('f1', "\u265d", 'white'),
+        queen: Queen.new('d1', "\u265b", 'white'),
+        king: King.new('e1', "\u265a", 'white')
       }
     else
       @pieces = 
       {
-      pawn1: BlackPawn.new('a7', "\u265f", 'black'),
-      pawn2: BlackPawn.new('b7', "\u265f", 'black'),
-      pawn3: BlackPawn.new('c7', "\u265f", 'black'),
-      pawn4: BlackPawn.new('d7', "\u265f", 'black'),
-      pawn5: BlackPawn.new('e7', "\u265f", 'black'),
-      pawn6: BlackPawn.new('f7', "\u265f", 'black'),
-      pawn7: BlackPawn.new('g7', "\u265f", 'black'),
-      pawn8: BlackPawn.new('h7', "\u265f", 'black'),
-      rook1: Rook.new('a8', "\u265c", 'black'),
-      rook2: Rook.new('h8', "\u265c", 'black'),
-      knight1: Knight.new('g8', "\u265e", 'black'),
-      knight2: Knight.new('b8', "\u265e", 'black'),
-      bishop1: Bishop.new('c8', "\u265d", 'black'),
-      bishop2: Bishop.new('f8', "\u265d", 'black'),
-      queen: Queen.new('d8', "\u265b", 'black'),
-      king: King.new('e8', "\u265a", 'black')
+      pawn1: BlackPawn.new('a7', "\u2659", 'black'),
+      pawn2: BlackPawn.new('b7', "\u2659", 'black'),
+      pawn3: BlackPawn.new('c7', "\u2659", 'black'),
+      pawn4: BlackPawn.new('d7', "\u2659", 'black'),
+      pawn5: BlackPawn.new('e7', "\u2659", 'black'),
+      pawn6: BlackPawn.new('f7', "\u2659", 'black'),
+      pawn7: BlackPawn.new('g7', "\u2659", 'black'),
+      pawn8: BlackPawn.new('h7', "\u2659", 'black'),
+      rook1: Rook.new('a8', "\u2656", 'black'),
+      rook2: Rook.new('h8', "\u2656", 'black'),
+      knight1: Knight.new('g8', "\u2658", 'black'),
+      knight2: Knight.new('b8', "\u2658", 'black'),
+      bishop1: Bishop.new('c8', "\u2657", 'black'),
+      bishop2: Bishop.new('f8', "\u2657", 'black'),
+      queen: Queen.new('d8', "\u2655", 'black'),
+      king: King.new('e8', "\u2654", 'black')
       }
     end
   end
