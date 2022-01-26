@@ -4,24 +4,31 @@ require_relative '../lib/board'
 require_relative '../lib/player'
 require_relative '../lib/piece'
 
+# GAME FILE
 describe Game do
   
 end
-
+# BOARD FILE
 describe Board do
   
 end
-
+# PLAYER FILE
 describe Player do
   
 end
 
+# PIECES FILE
 describe Piece do
   
 end
 
 describe Pawn do
-  
+  describe '#possibleMoves' do
+    context 'when not blocked' do
+      it 'returns two spaces' do
+
+      end
+  end
 end
 
 describe Rook do
