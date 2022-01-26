@@ -80,16 +80,28 @@ class Player
 
   def move
     loop do
+      # Loop through until the move is verified as valid
       puts "#{@color}, please enter in a move (ex. a2-b5):"
       move = gets.chomp
       if move.length != 5
         continue
       end
+
       # Need to match the current location to a piece (Hash method)
-      selected_piece = move[0..1]
+      start_loc = numberPosition(move[0..1])
+
+      selected_piece = @pieces.select do |piece|
+        if piece.num_position == start_loc
+          return true
+        else
+          return false
+        end
+      end
+
       new_location = numberPosition(move[3..4])
       move = [selected_piece, new_location]
       if @possible_moves.include?(move)
+        # Will this allow move to be used in the next function?
         return move
       else
         continue
@@ -100,7 +112,7 @@ class Player
     # Remove opponent's piece if move captures
     @board.active_enemy.pieces.each do |piece|
       if piece.num_position == move[1]
-        selected_piece.capture(piece)
+        piece.player.pieces.delete(piece)
       end
     end
 

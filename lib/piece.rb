@@ -11,16 +11,16 @@ class Piece
     @num_position = numberPosition(@char_position)
   end
 
-  def capture(piece)
-    piece.remove
-  end
+#  def capture(piece)
+#     piece.remove
+#   end
 
-  def remove
-    self.delete
-    # CHECK RUBY SYNTAX FOR DELETING
-    # Probably just needs to be deleted from the player's pieces hash
+#   def remove
+#     self.delete
+#     # CHECK RUBY SYNTAX FOR DELETING
+#     # Probably just needs to be deleted from the player's pieces hash
 
-  end
+#   end 
 
 
   attr_reader :symbol, :char_position, :possible_moves, :num_position
