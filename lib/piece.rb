@@ -1,17 +1,25 @@
+require_relative 'space'
+
 class Piece
-  def initialize(position, symbol, color)
+  include Space
+  def initialize(player, position, symbol, color)
     @char_position = position
     @symbol = symbol
     @color = color
+    @player = player
     @possible_moves = []
     @num_position = numberPosition(@char_position)
   end
 
-  def numberPosition(position)
-    column = position[0].ord - 97
-    row = -1*(position[1].to_i-8)
-    numbered = [row, column]
-    return numbered
+  def capture(piece)
+    piece.remove
+  end
+
+  def remove
+    self.delete
+    # CHECK RUBY SYNTAX FOR DELETING
+    # Probably just needs to be deleted from the player's pieces hash
+
   end
 
 
@@ -28,17 +36,26 @@ class WhitePawn < Piece
   def possibleMoves
     move_array = []
     move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
-                 .reject_if {|location| occupied_self?(location) }
-                 .keep_if {|location| location.valid? }
+                 .reject_if {|location| self.player.board.occupied_self?(location) }
+                 .keep_if {|location| self.player.board.onBoard?(location) }
+    move_array = move_array.select do |position|
+      @player.board.potential_board[num_position[0]][num_position[1]] = ' '
+      @player.board.potential_board[position[0]][position[1]] = self
+      if @player.check?
+        return false
+      end
+      return true
+    end
+
     return move_array
   end
 end
 
 class BlackPawn < Piece
   MOVES = [[0, 1], [-1, 1], [1, 1]].freeze
-
+  move_array = []
   def possibleMoves
-
+    
   end
 end
 

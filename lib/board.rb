@@ -1,15 +1,19 @@
 require_relative 'player'
+require_relative 'space'
 
 class Board
+  include Space
   def initialize
     @board = Array.new(8) {Array.new(8) {' '}}
-    @white = Player.new('white')
-    @black = Player.new('black')
+    @potential_board = @board
+    @white = Player.new('white', self)
+    @black = Player.new('black', self)
     @active_player = @white
     @active_enemy = @black
   end
 
   attr_reader :active_player
+  attr_accessor :board
 
   def displayBoard
     @board.each_with_index do |row, index|
@@ -41,6 +45,11 @@ class Board
       row = piece.num_position[0]
       @board[row][column] = piece 
     end
+    @potential_board = @board
+  end
+
+  def updatePotentialBoard
+
   end
 
   def onBoard?(position)
