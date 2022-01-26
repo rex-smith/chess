@@ -25,7 +25,7 @@ end
 describe Pawn do
   describe '#possibleMoves' do
     context 'when not blocked' do
-      it 'returns two spaces' do
+      it 'returns two spaces and existing pawn as mover' do
 
       end
   end

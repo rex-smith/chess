@@ -98,7 +98,15 @@ class Player
     end
 
     # Remove opponent's piece if move captures
+    @board.active_enemy.pieces.each do |piece|
+      if piece.num_position == move[1]
+        selected_piece.capture(piece)
+      end
+    end
+
     # Move piece to new spot on board and update board
+    @selected_piece.num_position = new_location
+    @board.updateBoard
 
   end
 
