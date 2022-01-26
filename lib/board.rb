@@ -4,19 +4,18 @@ require_relative 'space'
 class Board
   include Space
   def initialize
-    @board = Array.new(8) {Array.new(8) {' '}}
-    @potential_board = @board
+    @grid = Array.new(8) {Array.new(8) {' '}}
     @white = Player.new('white', self)
     @black = Player.new('black', self)
     @active_player = @white
     @active_enemy = @black
   end
 
-  attr_reader :active_player
-  attr_accessor :board
+  attr_reader :active_player, :active_enemy
+  attr_accessor :grid
 
   def displayBoard
-    @board.each_with_index do |row, index|
+    @grid.each_with_index do |row, index|
       print "#{-1*(index-8)} "
       row.each do |piece|
         if piece == ' '
@@ -32,24 +31,19 @@ class Board
   end
 
   def updateBoard
-    @board = Array.new(8) {Array.new(8) {' '}}
+    @grid = Array.new(8) {Array.new(8) {' '}}
 
     @white.pieces.each do |name, piece|
       column = piece.num_position[1]
       row = piece.num_position[0]
-      @board[row][column] = piece 
+      @grid[row][column] = piece 
     end
 
     @black.pieces.each do |name, piece|
       column = piece.num_position[1]
       row = piece.num_position[0]
-      @board[row][column] = piece 
+      @grid[row][column] = piece 
     end
-    @potential_board = @board
-  end
-
-  def updatePotentialBoard
-
   end
 
   def onBoard?(position)
@@ -57,14 +51,14 @@ class Board
   end
 
   def occupied_enemy?(position)
-    if @board[position[0], position[1]].color == active_enemy.color
+    if @grid[position[0], position[1]].color == @active_enemy.color
       return true
     end
     return false
   end
 
   def occupied_self?(position)
-    if @board[position[0], position[1]].color == active_player.color
+    if @grid[position[0], position[1]].color == @active_player.color
       return true
     end
     return false

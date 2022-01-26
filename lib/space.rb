@@ -1,4 +1,5 @@
-Module Space
+class Space
+  # NEED TO MAKE THIS A MODULE
   def numberPosition(char_position)
     column = char_position[0].ord - 97
     row = -1*(char_position[1].to_i-8)
@@ -8,8 +9,8 @@ Module Space
 
   def charPosition(num_position)
     # Is this the right function from ord to char?
-    column = (num_position[0] + 97).char
-    row = -1*(num_position[1]+8)
+    column = (num_position[0] + 97).chr
+    row = -1*(num_position[1]) + 8
     char = [row, column]
     return char
   end

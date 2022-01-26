@@ -5,16 +5,13 @@ class Player
   include Space
   def initialize(color, board)
     @board = board
-    @potential_board = @board.potential_board
-    @actual_board = @board.board
     @pieces = {}
     @color = color
     initialize_pieces(color)
-    @check_status  = false
     @possible_moves = []
   end
 
-  attr_accessor :board, :possible_moves, :potential_board, :actual_board
+  attr_accessor :board, :possible_moves
   attr_reader :pieces, :color
 
   def initialize_pieces(color)
@@ -81,6 +78,7 @@ class Player
   end
 
   def select_piece(num_location)
+    # This may return a hash, needs to be checked
     selected_piece = @pieces.select do |piece|
       if piece.num_position == num_location
         return true
@@ -129,7 +127,7 @@ class Player
 
   def move_piece(move)
     # Move piece to new spot on board and update board
-    @selected_piece.num_position = new_location
+    move[0].num_position = new_location
     @board.updateBoard
   end
 end
