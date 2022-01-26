@@ -5,6 +5,8 @@ class Player
   include Space
   def initialize(color, board)
     @board = board
+    @potential_board = @board.potential_board
+    @actual_board = @board.board
     @pieces = {}
     @color = color
     initialize_pieces(color)
@@ -12,7 +14,7 @@ class Player
     @possible_moves = []
   end
 
-  attr_accessor :board, :possible_moves
+  attr_accessor :board, :possible_moves, :potential_board, :actual_board
   attr_reader :pieces, :color
 
   def initialize_pieces(color)
@@ -59,9 +61,9 @@ class Player
     end
   end
 
-  def check?
-    @board.active_enemy.possibleMoves
-    @board.active_enemy.possible_moves.each do |move|
+  def check?(board)
+    board.active_enemy.possibleMoves
+    board.active_enemy.possible_moves.each do |move|
       if move.include?(@pieces[king].position)
         return true
       end
@@ -78,8 +80,20 @@ class Player
     end
   end
 
-  def move
-    loop do
+  def select_piece(num_location)
+    selected_piece = @pieces.select do |piece|
+      if piece.num_position == num_location
+        return true
+      else
+        return false
+      end
+    end
+    return selected_piece
+  end
+
+  def choose_move
+    move = []
+    until @possible_moves.include?(move)
       # Loop through until the move is verified as valid
       puts "#{@color}, please enter in a move (ex. a2-b5):"
       move = gets.chomp
@@ -87,39 +101,35 @@ class Player
         continue
       end
 
-      # Need to match the current location to a piece (Hash method)
+      # Match the current location to a piece
       start_loc = numberPosition(move[0..1])
-
-      selected_piece = @pieces.select do |piece|
-        if piece.num_position == start_loc
-          return true
-        else
-          return false
-        end
-      end
-
+      selected_piece = select_piece(start_loc)
       new_location = numberPosition(move[3..4])
       move = [selected_piece, new_location]
-      if @possible_moves.include?(move)
-        # Will this allow move to be used in the next function?
-        return move
-      else
-        continue
-      end
-      break
     end
+    return move
 
+  end
+
+  def move
+    move = choose_move
+    capture_opponent(move)
+    move_piece(move)
+  end
+
+  def capture_opponent(move)
     # Remove opponent's piece if move captures
     @board.active_enemy.pieces.each do |piece|
       if piece.num_position == move[1]
         piece.player.pieces.delete(piece)
+        # Could be helpful to move piece to "captured" hash of pieces
       end
     end
+  end
 
+  def move_piece(move)
     # Move piece to new spot on board and update board
     @selected_piece.num_position = new_location
     @board.updateBoard
-
   end
-
 end
