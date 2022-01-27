@@ -1,5 +1,4 @@
 module Space
-  
   def numberPosition(char_position)
     column = char_position[0].ord - 97
     row = -1*(char_position[1].to_i-8)
