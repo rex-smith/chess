@@ -9,7 +9,6 @@ require_relative '../lib/space'
 # describe Game do
   
 # end
-
 # # BOARD FILE
 # describe Board do
 #   describe 'onBoard?' do
@@ -184,7 +183,8 @@ describe Space do
   describe '#numberPosition' do
     context 'when given a character position' do
       it 'returns the number position' do
-        num_position = numberPosition('a2')
+        subject(:num_test) { described_class.new }
+        num_position = space_test.numberPosition('a2')
         expect(num_position).to eq([0,6])
       end
     end
@@ -193,7 +193,8 @@ describe Space do
   describe '#charPosition' do
     context 'when given a number position' do
       it 'returns the character position' do
-        char_position = charPosition([0,6])
+        subject(:char_test) { described_class.new }
+        char_position = char_test.charPosition([0,6])
         expect(char_position).to eq('a2')
       end
     end
