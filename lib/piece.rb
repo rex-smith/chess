@@ -21,6 +21,13 @@ class Piece
     test_board.grid[position[0]][position[1]] = self
     @player.check?
   end
+
+  # Map moves from array set
+  
+  # Reject if occupiedBySelf
+
+  # Keep if onBoard
+
 end
 
 # Pawns -> King -> Knights
