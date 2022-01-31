@@ -34,15 +34,15 @@ class Board
     @grid = Array.new(8) {Array.new(8) {' '}}
 
     @white.pieces.each do |name, piece|
-      column = piece.num_position[1]
-      row = piece.num_position[0]
-      @grid[row][column] = piece 
+      y = piece.num_position[1]
+      x = piece.num_position[0]
+      @grid[y][x] = piece 
     end
 
     @black.pieces.each do |name, piece|
-      column = piece.num_position[1]
-      row = piece.num_position[0]
-      @grid[row][column] = piece 
+      y = piece.num_position[1]
+      x = piece.num_position[0]
+      @grid[y][x] = piece 
     end
   end
 
@@ -51,14 +51,14 @@ class Board
   end
 
   def occupied_enemy?(position)
-    if @grid[position[0], position[1]].color == @active_enemy.color
+    if @grid[position[0]][position[1]].color == @active_enemy.color
       return true
     end
     return false
   end
 
   def occupied_self?(position)
-    if @grid[position[0], position[1]].color == @active_player.color
+    if @grid[position[0]][position[1]].color == @active_player.color
       return true
     end
     return false

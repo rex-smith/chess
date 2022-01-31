@@ -182,9 +182,9 @@ require_relative '../lib/space'
 describe Space do
   describe '#numberPosition' do
     context 'when given a character position' do
+      let(:num_test) { Class.new { extend Space } }
       it 'returns the number position' do
-        subject(:num_test) { described_class.new }
-        num_position = space_test.numberPosition('a2')
+        num_position = num_test.numberPosition('a2')
         expect(num_position).to eq([0,6])
       end
     end
@@ -192,8 +192,8 @@ describe Space do
 
   describe '#charPosition' do
     context 'when given a number position' do
+      let(:char_test) { Class.new { extend Space } }
       it 'returns the character position' do
-        subject(:char_test) { described_class.new }
         char_position = char_test.charPosition([0,6])
         expect(char_position).to eq('a2')
       end
