@@ -15,8 +15,6 @@ class Piece
 
   def test_move(move)
     test_board = @player.board
-    # Will this alter the original board? Do I need to make a full new one?
-    # You need some record of who the enemy is to see if you are in check
     test_board.grid[self.num_position[0]][self.num_position[1]] = ' '
     test_board.grid[position[0]][position[1]] = self
     @player.check?
@@ -40,7 +38,7 @@ class WhitePawn < Piece
 
   # Think about how moves are actually going to be [row, column]
   # which is [y, x]
-  MOVES = [[-1, 0], [-1, 1], [-1, -1]].freeze
+  MOVES = [[0, -1], [-1, -1], [1, -1]].freeze
 
   def possibleMoves
     move_array = []
@@ -54,6 +52,7 @@ class WhitePawn < Piece
       # Check if this puts us in check
       # Need to figure out how to calculate check on fake board or 
       # use the real board and just reverse moves
+
       if @player.check?
         return false
       end
