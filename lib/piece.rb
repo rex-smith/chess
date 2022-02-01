@@ -13,31 +13,13 @@ class Piece
 
   attr_reader :symbol, :char_position, :possible_moves, :num_position
 
-  def put_in_check(move)
-    # Initialize the test grid as current state of grid
-    @player.board.update_board(@player.board.test_grid)
-    # Play move as if it is real
-    # Capture opponent if there
-    @player.capture_opponent(move, @player.board.test_grid)
-    # Move our piece to the new location
-    @player.move_piece(move, @player.board.test_grid)
-    # Update the test grid
-    @player.board.update_board(@player.board.test_grid)
-    # See if we are now in check
-    in_check = @player.check?(@player.board.test_grid)
-    return !in_check
-  end
-
 end
 
 class WhitePawn < Piece
-  # Add initial move feature later
-  # Add en passant later
-  # Add Queening later
 
   MOVES = [[0, -1], [-1, -1], [1, -1]].freeze
 
-  def possible_moves_pre_check
+  def moves_pre_check
     move_array = []
     move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .reject_if {|location| @player.board.occupied_self?(location) }
@@ -49,10 +31,21 @@ class WhitePawn < Piece
     return move_array
   end
 
-  def possible_moves_no_check
+  def moves_no_check
     move_array = []
-    move_array = possible_moves_pre_check
-    move_array = move_array.select {|move| put_in_check(move)}
+    move_array = moves_pre_check
+    move_array = move_array.select do |move|
+      in_check = false
+      # Run through full move scenario
+      @player.capture_opponent(move[1])
+      @player.move_piece(move)
+      in_check = @player.check?
+      # Reverse move back to original
+      @player.reverse_move_piece(move)
+      @player.reverse_capture(move[1])
+      # Only select moves that don't move into check
+      return !in_check
+    end
     return move_array
   end
 end

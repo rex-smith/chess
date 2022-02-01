@@ -12,7 +12,7 @@ class Board
     @active_enemy = @black
   end
 
-  attr_accessor :real_grid, :test_grid, :active_player, :active_enemy
+  attr_accessor :real_grid, :test_grid, :active_player, :active_enemy, :white, :black
 
   def displayBoard
     @real_grid.each_with_index do |row, index|

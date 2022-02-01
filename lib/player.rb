@@ -5,9 +5,10 @@ class Player
   include Space
   def initialize(color, board)
     @board = board
-    @pieces = {}
-    @removed_pieces = {}
+    @pieces = []
+    @removed_pieces = []
     @color = color
+    @enemy = nil
     initialize_pieces(color)
     @possible_moves = []
     @possible_moves_pre_check = []
@@ -18,48 +19,51 @@ class Player
   def initialize_pieces(color)
     if color == 'white'
       @pieces = 
-      {
-        pawn1: WhitePawn.new(self, 'a2', "\u265f", 'white'),
-        pawn2: WhitePawn.new(self, 'b2', "\u265f", 'white'),
-        pawn3: WhitePawn.new(self, 'c2', "\u265f", 'white'),
-        pawn4: WhitePawn.new(self, 'd2', "\u265f", 'white'),
-        pawn5: WhitePawn.new(self, 'e2', "\u265f", 'white'),
-        pawn6: WhitePawn.new(self, 'f2', "\u265f", 'white'),
-        pawn7: WhitePawn.new(self, 'g2', "\u265f", 'white'),
-        pawn8: WhitePawn.new(self, 'h2', "\u265f", 'white'),
-        rook1: Rook.new(self, 'a1', "\u265c", 'white'),
-        rook2: Rook.new(self, 'h1', "\u265c", 'white'),
-        knight1: Knight.new(self, 'g1', "\u265e", 'white'),
-        knight2: Knight.new(self, 'b1', "\u265e", 'white'),
-        bishop1: Bishop.new(self, 'c1', "\u265d", 'white'),
-        bishop2: Bishop.new(self, 'f1', "\u265d", 'white'),
-        queen: Queen.new(self, 'd1', "\u265b", 'white'),
-        king: King.new(self, 'e1', "\u265a", 'white')
-      }
+      [
+        WhitePawn.new(self, 'a2', "\u265f", 'white'),
+        WhitePawn.new(self, 'b2', "\u265f", 'white'),
+        WhitePawn.new(self, 'c2', "\u265f", 'white'),
+        WhitePawn.new(self, 'd2', "\u265f", 'white'),
+        WhitePawn.new(self, 'e2', "\u265f", 'white'),
+        WhitePawn.new(self, 'f2', "\u265f", 'white'),
+        WhitePawn.new(self, 'g2', "\u265f", 'white'),
+        WhitePawn.new(self, 'h2', "\u265f", 'white'),
+        Rook.new(self, 'a1', "\u265c", 'white'),
+        Rook.new(self, 'h1', "\u265c", 'white'),
+        Knight.new(self, 'g1', "\u265e", 'white'),
+        Knight.new(self, 'b1', "\u265e", 'white'),
+        Bishop.new(self, 'c1', "\u265d", 'white'),
+        Bishop.new(self, 'f1', "\u265d", 'white'),
+        Queen.new(self, 'd1', "\u265b", 'white'),
+        King.new(self, 'e1', "\u265a", 'white')
+      ]
+      @enemy = @board.black
     else
       @pieces = 
-      {
-      pawn1: BlackPawn.new(self, 'a7', "\u2659", 'black'),
-      pawn2: BlackPawn.new(self, 'b7', "\u2659", 'black'),
-      pawn3: BlackPawn.new(self, 'c7', "\u2659", 'black'),
-      pawn4: BlackPawn.new(self, 'd7', "\u2659", 'black'),
-      pawn5: BlackPawn.new(self, 'e7', "\u2659", 'black'),
-      pawn6: BlackPawn.new(self, 'f7', "\u2659", 'black'),
-      pawn7: BlackPawn.new(self, 'g7', "\u2659", 'black'),
-      pawn8: BlackPawn.new(self, 'h7', "\u2659", 'black'),
-      rook1: Rook.new(self, 'a8', "\u2656", 'black'),
-      rook2: Rook.new(self, 'h8', "\u2656", 'black'),
-      knight1: Knight.new(self, 'g8', "\u2658", 'black'),
-      knight2: Knight.new(self, 'b8', "\u2658", 'black'),
-      bishop1: Bishop.new(self, 'c8', "\u2657", 'black'),
-      bishop2: Bishop.new(self, 'f8', "\u2657", 'black'),
-      queen: Queen.new(self, 'd8', "\u2655", 'black'),
-      king: King.new(self, 'e8', "\u2654", 'black')
-      }
+      [
+      BlackPawn.new(self, 'a7', "\u2659", 'black'),
+      BlackPawn.new(self, 'b7', "\u2659", 'black'),
+      BlackPawn.new(self, 'c7', "\u2659", 'black'),
+      BlackPawn.new(self, 'd7', "\u2659", 'black'),
+      BlackPawn.new(self, 'e7', "\u2659", 'black'),
+      BlackPawn.new(self, 'f7', "\u2659", 'black'),
+      BlackPawn.new(self, 'g7', "\u2659", 'black'),
+      BlackPawn.new(self, 'h7', "\u2659", 'black'),
+      Rook.new(self, 'a8', "\u2656", 'black'),
+      Rook.new(self, 'h8', "\u2656", 'black'),
+      Knight.new(self, 'g8', "\u2658", 'black'),
+      Knight.new(self, 'b8', "\u2658", 'black'),
+      Bishop.new(self, 'c8', "\u2657", 'black'),
+      Bishop.new(self, 'f8', "\u2657", 'black'),
+      Queen.new(self, 'd8', "\u2655", 'black'),
+      King.new(self, 'e8', "\u2654", 'black')
+      ]
+      @enemy = @board.white
     end
   end
 
   def check?(grid)
+
     board.active_enemy.possible_moves_pre_check
     board.active_enemy.possible_moves_pre_check.each do |move|
       if move.include?(@pieces[king].position)
@@ -69,19 +73,19 @@ class Player
     return false
   end
 
-  def possible_moves_no_check
+  def total_moves_no_check
     @possible_moves = []
     @pieces.each do |piece|
-      piece.possible_moves.each do |move|
+      piece.moves_no_check.each do |move|
         @possible_moves.push(move)
       end
     end
   end
 
-  def possible_moves_pre_check
+  def total_moves_pre_check
     @possible_moves_pre_check = []
     @pieces.each do |piece|
-      piece.possible_moves_pre_check.each do |move|
+      piece.moves_pre_check.each do |move|
         @possible_moves_pre_check.push(move)
       end
     end
@@ -119,7 +123,7 @@ class Player
 
   end
 
-  def move
+  def play_turn
     # Outline possible moves
     possibleMoves
     # Loop through until player chooses valid move
@@ -130,24 +134,31 @@ class Player
     move_piece(move)
   end
 
-  def capture_opponent(move, grid)
+  def capture_opponent(position)
     # Remove opponent's piece if move captures
-    @board.active_enemy.pieces.each do |piece|
-      if piece.num_position == move[1]
+    @enemy.pieces.each do |piece|
+      if piece.num_position == position
         # Add to removed hash in case we need to add back
-        @board.active_enemy.removed_pieces << piece
-        @board.active_enemy.pieces.delete(piece)
+        @enemy.removed_pieces << piece
+        # Need to make sure this is correct for removing from an array
+        @enemy.pieces.delete(piece)
       end
     end
   end
 
-  def uncapture(piece)
+  def reverse_capture(piece)
     # Reverse the capturing of a piece
     @board.active_enemy.pieces << piece
   end
 
-  def move_piece(move, grid)
+  def move_piece(move)
     # Move piece to new spot on board and update board
+    move[0].num_position = move[1]
+    board.updateBoard
+  end
+
+  def reverse_move_piece(move)
+    # Need to get original position somehow
     move[0].num_position = move[1]
     board.updateBoard
   end
