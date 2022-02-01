@@ -6,13 +6,14 @@ class Player
   def initialize(color, board)
     @board = board
     @pieces = {}
+    @removed_pieces = {}
     @color = color
     initialize_pieces(color)
     @possible_moves = []
+    @possible_moves_pre_check = []
   end
 
-  attr_accessor :board, :possible_moves
-  attr_reader :pieces, :color
+  attr_accessor :board, :possible_moves, :pieces, :color
 
   def initialize_pieces(color)
     if color == 'white'
@@ -58,9 +59,9 @@ class Player
     end
   end
 
-  def check?(board)
-    board.active_enemy.possibleMoves
-    board.active_enemy.possible_moves.each do |move|
+  def check?(grid)
+    board.active_enemy.possible_moves_pre_check
+    board.active_enemy.possible_moves_pre_check.each do |move|
       if move.include?(@pieces[king].position)
         return true
       end
@@ -68,11 +69,20 @@ class Player
     return false
   end
 
-  def possibleMoves
+  def possible_moves_no_check
     @possible_moves = []
     @pieces.each do |piece|
       piece.possible_moves.each do |move|
         @possible_moves.push(move)
+      end
+    end
+  end
+
+  def possible_moves_pre_check
+    @possible_moves_pre_check = []
+    @pieces.each do |piece|
+      piece.possible_moves_pre_check.each do |move|
+        @possible_moves_pre_check.push(move)
       end
     end
   end
@@ -110,24 +120,35 @@ class Player
   end
 
   def move
+    # Outline possible moves
+    possibleMoves
+    # Loop through until player chooses valid move
     move = choose_move
+    # Capture opponent if they occupied the space
     capture_opponent(move)
+    # Move our piece to the new location
     move_piece(move)
   end
 
-  def capture_opponent(move)
+  def capture_opponent(move, grid)
     # Remove opponent's piece if move captures
     @board.active_enemy.pieces.each do |piece|
       if piece.num_position == move[1]
-        piece.player.pieces.delete(piece)
-        # Could be helpful to move piece to "captured" hash of pieces
+        # Add to removed hash in case we need to add back
+        @board.active_enemy.removed_pieces << piece
+        @board.active_enemy.pieces.delete(piece)
       end
     end
   end
 
-  def move_piece(move)
+  def uncapture(piece)
+    # Reverse the capturing of a piece
+    @board.active_enemy.pieces << piece
+  end
+
+  def move_piece(move, grid)
     # Move piece to new spot on board and update board
-    move[0].num_position = new_location
-    @board.updateBoard
+    move[0].num_position = move[1]
+    board.updateBoard
   end
 end

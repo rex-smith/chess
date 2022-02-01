@@ -13,66 +13,53 @@ class Piece
 
   attr_reader :symbol, :char_position, :possible_moves, :num_position
 
-  def test_move(move)
-    test_board = @player.board
-    test_board.grid[self.num_position[0]][self.num_position[1]] = ' '
-    test_board.grid[position[0]][position[1]] = self
-    @player.check?
+  def put_in_check(move)
+    # Initialize the test grid as current state of grid
+    @player.board.update_board(@player.board.test_grid)
+    # Play move as if it is real
+    # Capture opponent if there
+    @player.capture_opponent(move, @player.board.test_grid)
+    # Move our piece to the new location
+    @player.move_piece(move, @player.board.test_grid)
+    # Update the test grid
+    @player.board.update_board(@player.board.test_grid)
+    # See if we are now in check
+    in_check = @player.check?(@player.board.test_grid)
+    return !in_check
   end
 
-  # Map moves from array set
-  
-  # Reject if occupiedBySelf
-
-  # Keep if onBoard
-
 end
-
-# Pawns -> King -> Knights
-# Rooks -> Bishops -> Queen
 
 class WhitePawn < Piece
   # Add initial move feature later
   # Add en passant later
   # Add Queening later
 
-  # Think about how moves are actually going to be [row, column]
-  # which is [y, x]
   MOVES = [[0, -1], [-1, -1], [1, -1]].freeze
 
-  def possibleMoves
+  def possible_moves_pre_check
     move_array = []
     move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .reject_if {|location| @player.board.occupied_self?(location) }
                  .keep_if {|location| @player.board.onBoard?(location) }
-    move_array = move_array.select do |position|
-      # Updated potential board with move
-      @player.board.grid[num_position[0]][num_position[1]] = ' '
-      @player.board.grid[position[0]][position[1]] = self
-      # Check if this puts us in check
-      # Need to figure out how to calculate check on fake board or 
-      # use the real board and just reverse moves
-
-      if @player.check?
-        return false
-      end
-      return true
-    end
-
     # Make move_array format [piece, move location]
     move_array = move_array.map do |move|
       [self, move]
     end
     return move_array
   end
+
+  def possible_moves_no_check
+    move_array = []
+    move_array = possible_moves_pre_check
+    move_array = move_array.select {|move| put_in_check(move)}
+    return move_array
+  end
 end
 
 class BlackPawn < Piece
   MOVES = [[1, 0], [1, -1], [1, 1]].freeze
-  move_array = []
-  def possibleMoves
-    
-  end
+  
 end
 
 class Rook < Piece
