@@ -7,14 +7,15 @@ class Player
     @board = board
     @pieces = []
     @removed_pieces = []
+    @last_move = nil
     @color = color
     @enemy = nil
     initialize_pieces(color)
-    @possible_moves = []
+    @possible_moves_no_check = []
     @possible_moves_pre_check = []
   end
 
-  attr_accessor :board, :possible_moves, :pieces, :color
+  attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check
 
   def initialize_pieces(color)
     if color == 'white'
@@ -62,11 +63,11 @@ class Player
     end
   end
 
-  def check?(grid)
-
-    board.active_enemy.possible_moves_pre_check
-    board.active_enemy.possible_moves_pre_check.each do |move|
-      if move.include?(@pieces[king].position)
+  def check?
+    # Check if enemy's possible moves pre check can hit king
+    enemy_moves = @enemy.total_moves_pre_check
+    enemy_moves.each do |move|
+      if move[1].include?(@pieces[king].position)
         return true
       end
     end
@@ -74,12 +75,13 @@ class Player
   end
 
   def total_moves_no_check
-    @possible_moves = []
+    @possible_moves_no_check = []
     @pieces.each do |piece|
       piece.moves_no_check.each do |move|
-        @possible_moves.push(move)
+        @possible_moves_no_check.push(move)
       end
     end
+    @possible_moves_no_check
   end
 
   def total_moves_pre_check
@@ -89,23 +91,12 @@ class Player
         @possible_moves_pre_check.push(move)
       end
     end
-  end
-
-  def select_piece(num_location)
-    # This may return a hash, needs to be checked
-    selected_piece = @pieces.select do |piece|
-      if piece.num_position == num_location
-        return true
-      else
-        return false
-      end
-    end
-    return selected_piece
+    @possible_moves_pre_check
   end
 
   def choose_move
     move = []
-    until @possible_moves.include?(move)
+    until @possible_moves_no_check.include?(move)
       # Loop through until the move is verified as valid
       puts "#{@color}, please enter in a move (ex. a2-b5):"
       move = gets.chomp
@@ -120,7 +111,6 @@ class Player
       move = [selected_piece, new_location]
     end
     return move
-
   end
 
   def play_turn
@@ -140,7 +130,7 @@ class Player
       if piece.num_position == position
         # Add to removed hash in case we need to add back
         @enemy.removed_pieces << piece
-        # Need to make sure this is correct for removing from an array
+        # Delete from array
         @enemy.pieces.delete(piece)
       end
     end
@@ -148,7 +138,7 @@ class Player
 
   def reverse_capture(piece)
     # Reverse the capturing of a piece
-    @board.active_enemy.pieces << piece
+    @enemy.pieces << piece
   end
 
   def move_piece(move)
@@ -157,9 +147,15 @@ class Player
     board.updateBoard
   end
 
-  def reverse_move_piece(move)
-    # Need to get original position somehow
-    move[0].num_position = move[1]
-    board.updateBoard
+  def select_piece(num_location)
+    # This may return a hash, needs to be checked
+    selected_piece = @pieces.select do |piece|
+      if piece.num_position == num_location
+        return true
+      else
+        return false
+      end
+    end
+    return selected_piece
   end
 end

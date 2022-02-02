@@ -22,7 +22,7 @@ class WhitePawn < Piece
   def moves_pre_check
     move_array = []
     move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
-                 .reject_if {|location| @player.board.occupied_self?(location) }
+                 .reject {|location| @player.board.occupied_self?(location) }
                  .keep_if {|location| @player.board.onBoard?(location) }
     # Make move_array format [piece, move location]
     move_array = move_array.map do |move|
@@ -41,8 +41,8 @@ class WhitePawn < Piece
       @player.move_piece(move)
       in_check = @player.check?
       # Reverse move back to original
-      @player.reverse_move_piece(move)
-      @player.reverse_capture(move[1])
+      @player.move_piece(@player.last_move)
+      @player.reverse_capture(@player.removed_pieces.last)
       # Only select moves that don't move into check
       return !in_check
     end

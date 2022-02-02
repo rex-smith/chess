@@ -10,7 +10,8 @@ class Game
     until game_over? do
       @board.updateBoard
       @board.displayBoard
-      @board.active_player.move
+      @board.active_player.play_turn
+      @board.change_active
     end
     end_game
   end
