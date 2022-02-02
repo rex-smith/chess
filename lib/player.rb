@@ -10,7 +10,7 @@ class Player
     @last_move = nil
     @color = color
     @enemy = nil
-    initialize_pieces(color)
+    # initialize_pieces(color)
     @possible_moves_no_check = []
     @possible_moves_pre_check = []
   end
@@ -21,43 +21,43 @@ class Player
     if color == 'white'
       @pieces = 
       [
-        WhitePawn.new(self, 'a2', "\u265f", 'white'),
-        WhitePawn.new(self, 'b2', "\u265f", 'white'),
-        WhitePawn.new(self, 'c2', "\u265f", 'white'),
-        WhitePawn.new(self, 'd2', "\u265f", 'white'),
-        WhitePawn.new(self, 'e2', "\u265f", 'white'),
-        WhitePawn.new(self, 'f2', "\u265f", 'white'),
-        WhitePawn.new(self, 'g2', "\u265f", 'white'),
-        WhitePawn.new(self, 'h2', "\u265f", 'white'),
-        Rook.new(self, 'a1', "\u265c", 'white'),
-        Rook.new(self, 'h1', "\u265c", 'white'),
-        Knight.new(self, 'g1', "\u265e", 'white'),
-        Knight.new(self, 'b1', "\u265e", 'white'),
-        Bishop.new(self, 'c1', "\u265d", 'white'),
-        Bishop.new(self, 'f1', "\u265d", 'white'),
-        Queen.new(self, 'd1', "\u265b", 'white'),
-        King.new(self, 'e1', "\u265a", 'white')
+        WhitePawn.new(self, [0,6], "\u265f", 'white'),
+        WhitePawn.new(self, [1,6], "\u265f", 'white'),
+        WhitePawn.new(self, [2,6], "\u265f", 'white'),
+        WhitePawn.new(self, [3,6], "\u265f", 'white'),
+        WhitePawn.new(self, [4,6], "\u265f", 'white'),
+        WhitePawn.new(self, [5,6], "\u265f", 'white'),
+        WhitePawn.new(self, [6,6], "\u265f", 'white'),
+        WhitePawn.new(self, [7,6], "\u265f", 'white'),
+        Rook.new(self, [0,7], "\u265c", 'white'),
+        Rook.new(self, [7,7], "\u265c", 'white'),
+        Knight.new(self, [1,7], "\u265e", 'white'),
+        Knight.new(self, [6,7], "\u265e", 'white'),
+        Bishop.new(self, [2,7], "\u265d", 'white'),
+        Bishop.new(self, [5,7], "\u265d", 'white'),
+        Queen.new(self, [3,7], "\u265b", 'white'),
+        King.new(self, [4,7], "\u265a", 'white')
       ]
       @enemy = @board.black
     else
       @pieces = 
       [
-      BlackPawn.new(self, 'a7', "\u2659", 'black'),
-      BlackPawn.new(self, 'b7', "\u2659", 'black'),
-      BlackPawn.new(self, 'c7', "\u2659", 'black'),
-      BlackPawn.new(self, 'd7', "\u2659", 'black'),
-      BlackPawn.new(self, 'e7', "\u2659", 'black'),
-      BlackPawn.new(self, 'f7', "\u2659", 'black'),
-      BlackPawn.new(self, 'g7', "\u2659", 'black'),
-      BlackPawn.new(self, 'h7', "\u2659", 'black'),
-      Rook.new(self, 'a8', "\u2656", 'black'),
-      Rook.new(self, 'h8', "\u2656", 'black'),
-      Knight.new(self, 'g8', "\u2658", 'black'),
-      Knight.new(self, 'b8', "\u2658", 'black'),
-      Bishop.new(self, 'c8', "\u2657", 'black'),
-      Bishop.new(self, 'f8', "\u2657", 'black'),
-      Queen.new(self, 'd8', "\u2655", 'black'),
-      King.new(self, 'e8', "\u2654", 'black')
+      BlackPawn.new(self, [0,1], "\u2659", 'black'),
+      BlackPawn.new(self, [1,1], "\u2659", 'black'),
+      BlackPawn.new(self, [2,1], "\u2659", 'black'),
+      BlackPawn.new(self, [3,1], "\u2659", 'black'),
+      BlackPawn.new(self, [4,1], "\u2659", 'black'),
+      BlackPawn.new(self, [5,1], "\u2659", 'black'),
+      BlackPawn.new(self, [6,1], "\u2659", 'black'),
+      BlackPawn.new(self, [7,1], "\u2659", 'black'),
+      Rook.new(self, [0,0], "\u2656", 'black'),
+      Rook.new(self, [7,0], "\u2656", 'black'),
+      Knight.new(self, [1,0], "\u2658", 'black'),
+      Knight.new(self, [6,0], "\u2658", 'black'),
+      Bishop.new(self, [2,0], "\u2657", 'black'),
+      Bishop.new(self, [5,0], "\u2657", 'black'),
+      Queen.new(self, [3,0], "\u2655", 'black'),
+      King.new(self, [4,0], "\u2654", 'black')
       ]
       @enemy = @board.white
     end

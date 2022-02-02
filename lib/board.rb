@@ -32,13 +32,13 @@ class Board
   def updateBoard
     @grid = Array.new(8) {Array.new(8) {' '}}
 
-    @white.pieces.each do |name, piece|
+    @white.pieces.each do |piece|
       y = piece.num_position[1]
       x = piece.num_position[0]
       @grid[y][x] = piece 
     end
 
-    @black.pieces.each do |name, piece|
+    @black.pieces.each do |piece|
       y = piece.num_position[1]
       x = piece.num_position[0]
       @grid[y][x] = piece 
@@ -50,14 +50,24 @@ class Board
   end
 
   def occupied_enemy?(position)
-    if @grid[position[0]][position[1]].color == @active_enemy.color
-      return true
+    if contains_piece?(position)
+      if @grid[position[0]][position[1]].color == @active_enemy.color
+        return true
+      end
     end
     return false
   end
 
+  def contains_piece?(position)
+    if @grid[position[0]][position[1]].instance_of? Piece
+      return true
+    else
+      return false
+    end
+  end
+
   def occupied_self?(position)
-    unless @grid[position[0]][position[1]] == ' '
+    if contains_piece?(position)
       if @grid[position[0]][position[1]].color == @active_player.color
         return true
       end

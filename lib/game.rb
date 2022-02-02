@@ -7,6 +7,8 @@ class Game
   end
 
   def play_game
+    @board.updateBoard
+    @board.displayBoard
     until game_over? do
       @board.updateBoard
       @board.displayBoard

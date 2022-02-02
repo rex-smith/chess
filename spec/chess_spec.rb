@@ -1,7 +1,7 @@
-# require_relative '../lib/main'
-# require_relative '../lib/game'
-# require_relative '../lib/board'
-# require_relative '../lib/player'
+require_relative '../lib/main'
+require_relative '../lib/game'
+require_relative '../lib/board'
+require_relative '../lib/player'
 require_relative '../lib/piece'
 require_relative '../lib/space'
 
@@ -153,11 +153,10 @@ require_relative '../lib/space'
 describe WhitePawn do
   describe '#moves_pre_check' do
     context 'when not blocked and no enemies to capture' do
-      let(:fake_board) { double(Player)}
-      subject(:pawn_free) { described_class.new(fake_board, 'd2', "\u265f", 'white')}
+      fake_board = Board.new
+      pawn = fake_board.white.pieces[1]
       it 'returns one space and existing pawn as mover' do
-        allow()
-        expect(pawn_free.moves_pre_check).to eq([pawn_free, [4,4]])
+        expect(pawn.moves_pre_check[0]).to eq([pawn, [1,5]])
       end
     end
 
