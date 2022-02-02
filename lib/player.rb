@@ -66,8 +66,10 @@ class Player
   def check?
     # Check if enemy's possible moves pre check can hit king
     enemy_moves = @enemy.total_moves_pre_check
+    king = @pieces.select {|piece| piece.instance_of? King }.first()
+    king_position = king.num_position
     enemy_moves.each do |move|
-      if move[1].include?(@pieces[king].position)
+      if move[1].include?(king_position)
         return true
       end
     end
@@ -96,7 +98,8 @@ class Player
 
   def choose_move
     move = []
-    until @possible_moves_no_check.include?(move)
+    valid_move = false
+    until valid_move == true
       # Loop through until the move is verified as valid
       puts "#{@color}, please enter in a move (ex. a2-b5):"
       move = gets.chomp
@@ -108,7 +111,12 @@ class Player
       start_loc = numberPosition(move[0..1])
       selected_piece = select_piece(start_loc)
       new_location = numberPosition(move[3..4])
-      move = [selected_piece, new_location]
+
+      # This could be a method
+      if selected_piece.moves_no_check.include?(new_location)
+        move = [selected_piece.num_location, new_location]
+        valid_move = true
+      end
     end
     return move
   end
@@ -119,9 +127,9 @@ class Player
     # Loop through until player chooses valid move
     move = choose_move
     # Capture opponent if they occupied the space
-    capture_opponent(move)
+    capture_opponent(move[1])
     # Move our piece to the new location
-    move_piece(move)
+    move_piece(move[0], move[1])
   end
 
   def capture_opponent(position)
@@ -141,9 +149,11 @@ class Player
     @enemy.pieces << piece
   end
 
-  def move_piece(move)
+  def move_piece(start_location, end_location)
     # Move piece to new spot on board and update board
-    move[0].num_position = move[1]
+    selected_piece = select_piece(start_location)
+    selected_piece.num_position = end_location
+    @last_move = [start_location, end_location]
     board.updateBoard
   end
 

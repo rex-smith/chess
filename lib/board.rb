@@ -51,7 +51,7 @@ class Board
 
   def occupied_enemy?(position)
     if contains_piece?(position)
-      if @grid[position[0]][position[1]].color == @active_enemy.color
+      if @grid[position[1]][position[0]].color == @active_enemy.color
         return true
       end
     end
@@ -59,7 +59,7 @@ class Board
   end
 
   def contains_piece?(position)
-    if @grid[position[0]][position[1]].instance_of? Piece
+    if @grid[position[1]][position[0]].is_a? Piece
       return true
     else
       return false
