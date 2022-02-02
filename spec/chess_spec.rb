@@ -2,7 +2,7 @@
 # require_relative '../lib/game'
 # require_relative '../lib/board'
 # require_relative '../lib/player'
-# require_relative '../lib/piece'
+require_relative '../lib/piece'
 require_relative '../lib/space'
 
 # # GAME FILE
@@ -145,19 +145,61 @@ require_relative '../lib/space'
 #   end
 # end
 
-# # PIECES FILE
+# PIECES FILE
 # describe Piece do
   
 # end
 
-# describe Pawn do
-#   describe '#possibleMoves' do
-#     context 'when not blocked' do
-#       it 'returns two spaces and existing pawn as mover' do
+describe WhitePawn do
+  describe '#moves_pre_check' do
+    context 'when not blocked and no enemies to capture' do
+      let(:fake_board) { double(Player)}
+      subject(:pawn_free) { described_class.new(fake_board, 'd2', "\u265f", 'white')}
+      it 'returns one space and existing pawn as mover' do
+        allow()
+        expect(pawn_free.moves_pre_check).to eq([pawn_free, [4,4]])
+      end
+    end
 
-#       end
-#   end
-# end
+    context 'when not blocked and straight would put in check' do
+      it 'returns one space and existing pawn as mover' do
+
+      end
+    end
+
+    context 'when blocked by enemy' do
+      it 'returns empty array' do
+
+      end
+    end
+
+    context 'when blocked by self' do
+      it 'returns empty array' do
+
+      end
+    end
+
+    context 'when ahead is empty, and corners are occupied by enemy' do
+      it 'returns array with three moves' do
+
+      end
+    end
+  end
+
+  describe '#moves_no_check' do
+    context 'when not blocked' do
+      it 'returns one space and existing pawn as mover' do
+
+      end
+    end
+
+    context 'when not blocked but move would put in check' do
+      it 'returns empty array' do
+
+      end
+    end
+  end
+end
 
 # describe Rook do
   
