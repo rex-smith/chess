@@ -82,17 +82,50 @@ class WhitePawn < Piece
 end
 
 class BlackPawn < Piece
-  MOVES = [[1, 0], [1, -1], [1, 1]].freeze
   
+  ATTACK_MOVES = [[-1, 1], [1, 1]].freeze
+  STRAIGHT_MOVE = [[0, 1]].freeze
+
+  def moves_pre_check
+    move_array = []
+    attack_move_array = []
+    move_array = STRAIGHT_MOVE.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
+                 .keep_if {|location| @player.board.onBoard?(location) }
+                 .reject {|location| @player.occupied_self?(location) }
+                 .reject {|location| @player.occupied_enemy?(location) }
+
+    attack_move_array = ATTACK_MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
+                 .keep_if {|location| @player.board.onBoard?(location) }
+                 .keep_if {|location| @player.occupied_enemy?(location) }
+
+    unless attack_move_array.empty?
+      move_array = move_array + attack_move_array
+    end
+    return move_array
+  end
+
 end
 
 class Rook < Piece
-  
+  TRANSFORMATIONS = [[0,1], [0,-1], [-1,0], [1,0]].freeze
+
+  def moves_pre_check
+    move_array = []
+    move_array = TRANSFORMATIONS.map { |transformation| move_search(transformation) }.flatten(1)
+    return move_array
+  end
 end
 
 class Knight < Piece
   MOVES = [[1, 2], [-2, -1], [-1, 2], [2, -1], [1, -2], [-2, 1], [-1, -2], [2, 1]].freeze
 
+  def moves_pre_check
+    move_array = []
+    move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
+                 .keep_if {|location| @player.board.onBoard?(location) }
+                 .reject {|location| @player.occupied_self?(location) }
+    return move_array
+  end
 end
 
 class Bishop < Piece
@@ -106,7 +139,13 @@ class Bishop < Piece
 end
 
 class Queen < Piece
+  TRANSFORMATIONS = [[1,1], [1,-1], [-1,1], [-1,-1], [0,1], [1,0], [0, -1], [-1, 0]].freeze
 
+  def moves_pre_check
+    move_array = []
+    move_array = TRANSFORMATIONS.map { |transformation| move_search(transformation) }.flatten(1)
+    return move_array
+  end
 end
 
 class King < Piece
