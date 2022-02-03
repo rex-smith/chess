@@ -9,27 +9,29 @@ class Piece
     @possible_moves = []
     @num_position = position
     @char_position = charPosition(@num_position)
-    player.pieces << self
+    @player.pieces << self
   end
 
-  attr_reader :symbol, :char_position, :possible_moves, :num_position, :color
-  
+  attr_reader :symbol, :char_position, :possible_moves, :color
+  attr_accessor :num_position
+
   def moves_no_check
     move_array = []
     move_array = moves_pre_check
-    move_array = move_array.select do |move|
-      in_check = false
+    no_check_moves = []
+    move_array.each do |move|
       # Run through full move scenario
       @player.capture_opponent(move)
       @player.move_piece(@num_position, move)
-      in_check = @player.check?
+      if !@player.check?
+        no_check_moves << move
+      end
       # Reverse move back to original
       @player.move_piece(@player.last_move[1], @player.last_move[0])
-      @player.reverse_capture(@player.removed_pieces.last)
-      # Only select moves that don't move into check
-      return !in_check
+      @player.reverse_capture
     end
-    return move_array
+
+    return no_check_moves
   end
 
   # For Bishops, Queens, Rooks:
@@ -44,9 +46,9 @@ class Piece
     # First move or transformation
     location = [start_point[0] + transformation[0], start_point[1] + transformation[1]]
     # Stopping requirements (off board, occupied by self or last space was blocked by enemy)
-    until !@player.board.onBoard?(location) || @player.board.occupied_self?(location) || last_captured == true
+    until !@player.board.onBoard?(location) || @player.occupied_self?(location) || last_captured == true
       move_array << location
-      last_captured = true if @player.board.occupied_enemy?(location) == true
+      last_captured = true if @player.occupied_enemy?(location) == true
       location = [location[0] + transformation[0], location[1] + transformation[1]]
     end
     return move_array
@@ -61,14 +63,16 @@ class WhitePawn < Piece
 
   def moves_pre_check
     move_array = []
+    attack_move_array = []
     move_array = STRAIGHT_MOVE.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .keep_if {|location| @player.board.onBoard?(location) }
-                 .reject {|location| @player.board.occupied_self?(location) }
-                 .reject {|location| @player.board.occupied_enemy?(location) }
+                 .reject {|location| @player.occupied_self?(location) }
+                 .reject {|location| @player.occupied_enemy?(location) }
 
     attack_move_array = ATTACK_MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .keep_if {|location| @player.board.onBoard?(location) }
-                 .keep_if {|location| @player.board.occupied_enemy?(location) }
+                 .keep_if {|location| @player.occupied_enemy?(location) }
+
     unless attack_move_array.empty?
       move_array = move_array + attack_move_array
     end
@@ -112,7 +116,7 @@ class King < Piece
     move_array = []
     move_array = MOVES.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .keep_if {|location| @player.board.onBoard?(location) }
-                 .reject {|location| @player.board.occupied_self?(location) }
+                 .reject {|location| @player.occupied_self?(location) }
     return move_array
   end
 end

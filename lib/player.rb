@@ -6,7 +6,7 @@ class Player
   def initialize(color, board)
     @board = board
     @pieces = []
-    @removed_pieces = []
+    @removed_piece = nil
     @last_move = nil
     @color = color
     @enemy = nil
@@ -15,7 +15,9 @@ class Player
     @possible_moves_pre_check = []
   end
 
-  attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check
+  attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check,
+                :enemy, :last_move, :removed_piece
+
 
   def initialize_pieces(color)
     if color == 'white'
@@ -38,7 +40,6 @@ class Player
         Queen.new(self, [3,7], "\u265b", 'white'),
         King.new(self, [4,7], "\u265a", 'white')
       ]
-      @enemy = @board.black
     else
       @pieces = 
       [
@@ -59,17 +60,16 @@ class Player
       Queen.new(self, [3,0], "\u2655", 'black'),
       King.new(self, [4,0], "\u2654", 'black')
       ]
-      @enemy = @board.white
     end
   end
 
   def check?
     # Check if enemy's possible moves pre check can hit king
     enemy_moves = @enemy.total_moves_pre_check
-    king = @pieces.select {|piece| piece.instance_of? King }.first()
+    king = @pieces.find {|piece| piece.instance_of? King }
     king_position = king.num_position
     enemy_moves.each do |move|
-      if move[1].include?(king_position)
+      if move == king_position
         return true
       end
     end
@@ -109,7 +109,7 @@ class Player
 
       # Match the current location to a piece
       start_loc = numberPosition(move[0..1])
-      selected_piece = select_piece(start_loc)
+      selected_piece = @board.select_piece(start_loc)
       new_location = numberPosition(move[3..4])
 
       # This could be a method
@@ -134,38 +134,46 @@ class Player
 
   def capture_opponent(position)
     # Remove opponent's piece if move captures
-    @enemy.pieces.each do |piece|
-      if piece.num_position == position
-        # Add to removed hash in case we need to add back
-        @enemy.removed_pieces << piece
-        # Delete from array
-        @enemy.pieces.delete(piece)
-      end
+    if occupied_enemy?(position)
+      piece_to_remove = @board.select_piece(position)
+      @enemy.removed_piece = piece_to_remove
+      @enemy.pieces.delete_if {|piece| piece == piece_to_remove}
     end
   end
 
-  def reverse_capture(piece)
+  def reverse_capture
     # Reverse the capturing of a piece
-    @enemy.pieces << piece
+    if !@enemy.removed_piece.nil?
+      @enemy.pieces << @enemy.removed_piece
+      @enemy.removed_piece = nil
+    end
   end
 
   def move_piece(start_location, end_location)
     # Move piece to new spot on board and update board
-    selected_piece = select_piece(start_location)
+    selected_piece = @board.select_piece(start_location)
+    # Set selected piece's location to the end location
     selected_piece.num_position = end_location
     @last_move = [start_location, end_location]
-    board.updateBoard
+    @board.updateBoard
   end
 
-  def select_piece(num_location)
-    # This may return a hash, needs to be checked
-    selected_piece = @pieces.select do |piece|
-      if piece.num_position == num_location
+  def occupied_self?(position)
+    if @board.contains_piece?(position)
+      if @board.grid[position[1]][position[0]].color == @color
         return true
-      else
-        return false
       end
     end
-    return selected_piece
+    return false
   end
+
+  def occupied_enemy?(position)
+    if @board.contains_piece?(position)
+      if @board.grid[position[1]][position[0]].color == @enemy.color
+        return true
+      end
+    end
+    return false
+  end
+
 end
