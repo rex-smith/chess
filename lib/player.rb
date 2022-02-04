@@ -15,6 +15,7 @@ class Player
     @possible_moves_pre_check = []
   end
 
+  MOVE_FORMAT = /[a-hA-H][0-7]\-[a-hA-H][0-7]/
   attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check,
                 :enemy, :last_move, :removed_piece
 
@@ -65,9 +66,9 @@ class Player
 
   def check?
     # Check if enemy's possible moves pre check can hit king
-    enemy_moves = @enemy.total_moves_pre_check
     king = @pieces.find {|piece| piece.instance_of? King }
     king_position = king.num_position
+    enemy_moves = @enemy.total_moves_pre_check
     enemy_moves.each do |move|
       if move == king_position
         return true
@@ -103,7 +104,7 @@ class Player
       # Loop through until the move is verified as valid
       puts "#{@color}, please enter in a move (ex. a2-b5):"
       move = gets.chomp
-      if move.length != 5
+      if !move.match?(MOVE_FORMAT)
         continue
       end
 
@@ -122,8 +123,6 @@ class Player
   end
 
   def play_turn
-    # Outline possible moves
-    possibleMoves
     # Loop through until player chooses valid move
     move = choose_move
     # Capture opponent if they occupied the space

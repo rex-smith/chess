@@ -34,11 +34,6 @@ class Piece
     return no_check_moves
   end
 
-  # For Bishops, Queens, Rooks:
-  # Have four arrays of moves (6 for queen) (diag-left, diag-right, diag-back-left, diag-back-right)
-  # look through until blocked or off board, then cancel rest
-  # Use these as the initial map array
-
   def move_search(transformation)
     start_point = @num_position
     last_captured = false
