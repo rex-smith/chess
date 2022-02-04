@@ -3,17 +3,41 @@ require_relative 'space'
 
 class Board
   include Space
-  def initialize
+  def initialize(white=Player.new('white', self),black=Player.new('black', self))
+    @white = white
+    @black = black
+    set_enemies
+    @active_player = @white.turns == @black.turns ? @white : @black
+    @active_enemy = @active_player.enemy
     @grid = Array.new(8) {Array.new(8) {' '}}
-    @white = Player.new('white', self)
-    @black = Player.new('black', self)
-    @white.enemy = @black
-    @black.enemy = @white
-    @active_player = @white
-    @active_enemy = @black
   end
 
   attr_accessor :grid, :active_player, :active_enemy, :white, :black
+
+  def set_enemies
+    @white.enemy = @black
+    @black.enemy = @white
+  end
+
+
+  def to_json
+    JSON.dump ({
+      :white => @white.to_json,
+      :black => @black.to_json,
+    })
+  end
+
+  def self.from_json(string)
+    data = JSON.load string
+    self.new(data['white'], data['black'])
+  end
+
+  def save_game
+    saved_game = File.open("saved_game.txt", 'w')
+    saved_game.puts self.to_json
+    saved_game.close
+    abort("Game saved!")
+  end
 
   def displayBoard
     updateBoard
@@ -31,6 +55,8 @@ class Board
     print "   A  B  C  D  E  F  G  H\n"
     @white.print_removed_symbols
     @black.print_removed_symbols
+    puts "White is in check" if @white.check?
+    puts "Black is in check" if @black.check?
     puts
   end
 

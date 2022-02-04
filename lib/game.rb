@@ -1,9 +1,10 @@
 require_relative 'board'
 require_relative 'player'
+require 'json'
 
 class Game
   def initialize
-    @board = Board.new
+    
   end
 
   def choose_game_type
@@ -20,12 +21,18 @@ class Game
   end
 
   def load_game
-    # Check if there is saved game
-    # If yes load game
-    # If no, tell players that, and then do new game
+    if File.exist? "saved_game.txt"
+      @game_file = File.open("saved_game.txt", 'r')
+      @board = Board.from_json(@game_file)
+    else
+      puts "No game saved! Let's start a new game!"
+      puts "New game starting!"
+      new_game
+    end
   end
 
   def new_game
+    @board = Board.new
     @board.white.initialize_pieces
     @board.black.initialize_pieces
   end

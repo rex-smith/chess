@@ -2,14 +2,14 @@ require_relative 'space'
 
 class Piece
   include Space
-  def initialize(player, position)
+  def initialize(player, position, moves=0)
     @color = player.color
     @player = player
     @possible_moves = []
     @num_position = position
     @char_position = charPosition(@num_position)
     @player.pieces << self
-    @moves = 0
+    @moves = moves
   end
 
   attr_reader :symbol, :char_position, :possible_moves, :color
@@ -19,7 +19,6 @@ class Piece
     move_array = []
     move_array = moves_pre_check
     no_check_moves = []
-    @check_moves = []
 
     move_array.each do |end_position|
       # Run through full move scenario
@@ -37,8 +36,6 @@ class Piece
       # If not in check, add to list of possible moves
       if !@player.check?
         no_check_moves << end_position
-      else
-        @check_moves << end_position
       end
 
       # Reverse move back to original
@@ -51,6 +48,11 @@ class Piece
     end
 
     return no_check_moves
+  end
+
+  def check_moves
+    moves = moves_pre_check - moves_no_check
+    return moves
   end
 
   def move_search(transformation)
@@ -66,6 +68,19 @@ class Piece
       location = [location[0] + transformation[0], location[1] + transformation[1]]
     end
     return move_array
+  end
+
+  def to_json
+    JSON.dump ({
+      :player => @player,
+      :position => @num_position,
+      :moves => @moves,
+    })
+  end
+
+  def self.from_json(string)
+    data = JSON.load string
+    self.new(data['player'], data['position'], data['moves'])
   end
 
 end

@@ -3,20 +3,35 @@ require_relative 'space'
 
 class Player
   include Space
-  def initialize(color, board)
+  def initialize(color, board, pieces=[], turns=0, removed_pieces=[])
     @board = board
-    @pieces = []
-    @removed_pieces = []
+    @pieces = pieces
+    @removed_pieces = removed_pieces
     @color = color
     @enemy = nil
-    # initialize_pieces(color)
     @possible_moves_no_check = []
     @possible_moves_pre_check = []
+    @turns = turns
   end
 
   MOVE_FORMAT = /[a-hA-H][1-8]\-[a-hA-H][1-8]/
   attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check,
-                :enemy, :removed_pieces
+                :enemy, :removed_pieces, :turns
+
+  def to_json
+    JSON.dump ({
+      :color => @color,
+      :board => @board,
+      :pieces => @pieces.to_json,
+      :turns => @turns,
+      :removed_pieces => @removed_pieces.to_json
+    })
+  end
+
+  def self.from_json(string)
+    data = JSON.load string
+    self.new(data['color'], data['board'], data['pieces'], data['turns'], data['removed_pieces'])
+  end
 
 
   def initialize_pieces
@@ -104,6 +119,10 @@ class Player
       # Make sure input is of the correct format first
       loop do 
         move = get_input
+        if move == 'save'
+          @board.save_game
+        end
+
         if valid_input?(move)
           break
         end
@@ -116,6 +135,14 @@ class Player
       new_location = numberPosition(move[3..4])
 
       # Ensure move is valid
+      if !selected_piece.moves_pre_check.include?(new_location)
+        puts "Your piece can not move there."
+      end
+
+      if selected_piece.check_moves.include?(new_location)
+        puts "This move would put you into check."
+      end
+
       if selected_piece.moves_no_check.include?(new_location)
         move = [selected_piece.num_position, new_location]
         valid_move = true
@@ -126,7 +153,7 @@ class Player
   end
 
   def get_input
-    puts "#{@color.capitalize}, please enter in a move (ex. a2-b5):"
+    puts "#{@color.capitalize}, please enter in a move (ex. a2-b5) or enter 'save'"
     move = gets.chomp.downcase
     move
   end
@@ -149,6 +176,7 @@ class Player
     move_piece(start_position, new_position)
 
     # Increment moves counter
+    @turns += 1
     piece = select_piece(new_position)
     piece.moves += 1
   end
