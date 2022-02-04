@@ -6,8 +6,7 @@ class Player
   def initialize(color, board)
     @board = board
     @pieces = []
-    @removed_piece = nil
-    @last_move = nil
+    @removed_pieces = []
     @color = color
     @enemy = nil
     # initialize_pieces(color)
@@ -15,13 +14,13 @@ class Player
     @possible_moves_pre_check = []
   end
 
-  MOVE_FORMAT = /[a-hA-H][0-7]\-[a-hA-H][0-7]/
+  MOVE_FORMAT = /[a-hA-H][1-8]\-[a-hA-H][1-8]/
   attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check,
-                :enemy, :last_move, :removed_piece
+                :enemy, :removed_pieces
 
 
-  def initialize_pieces(color)
-    if color == 'white'
+  def initialize_pieces
+    if @color == 'white'
       @pieces = 
       [
         WhitePawn.new(self, [0,6]),
@@ -100,79 +99,126 @@ class Player
   def choose_move
     move = []
     valid_move = false
-    until valid_move == true
-      # Loop through until the move is verified as valid
-      puts "#{@color}, please enter in a move (ex. a2-b5):"
-      move = gets.chomp
-      if !move.match?(MOVE_FORMAT)
-        continue
+    
+    loop do
+      # Make sure input is of the correct format first
+      loop do 
+        move = get_input
+        if valid_input?(move)
+          break
+        end
+        puts "Wrong Format. Format ex. a2-b4"
       end
 
       # Match the current location to a piece
       start_loc = numberPosition(move[0..1])
-      selected_piece = @board.select_piece(start_loc)
+      selected_piece = select_piece(start_loc)
       new_location = numberPosition(move[3..4])
 
-      # This could be a method
+      # Ensure move is valid
       if selected_piece.moves_no_check.include?(new_location)
-        move = [selected_piece.num_location, new_location]
+        move = [selected_piece.num_position, new_location]
         valid_move = true
+        break
       end
     end
     return move
   end
 
+  def get_input
+    puts "#{@color.capitalize}, please enter in a move (ex. a2-b5):"
+    move = gets.chomp.downcase
+    move
+  end
+
+  def valid_input?(input)
+    input.match?(MOVE_FORMAT)
+  end
+
   def play_turn
     # Loop through until player chooses valid move
     move = choose_move
+
     # Capture opponent if they occupied the space
-    capture_opponent(move[1])
+    new_position = move[1]
+    start_position = move[0]
+
+    capture_opponent(new_position)
+
     # Move our piece to the new location
-    move_piece(move[0], move[1])
+    move_piece(start_position, new_position)
+
+    # Increment moves counter
+    piece = select_piece(new_position)
+    piece.moves += 1
   end
 
   def capture_opponent(position)
     # Remove opponent's piece if move captures
     if occupied_enemy?(position)
-      piece_to_remove = @board.select_piece(position)
-      @enemy.removed_piece = piece_to_remove
+      piece_to_remove = @enemy.select_piece(position)
+      @enemy.removed_pieces << piece_to_remove
       @enemy.pieces.delete_if {|piece| piece == piece_to_remove}
+      @board.updateBoard
     end
   end
 
   def reverse_capture
     # Reverse the capturing of a piece
-    if !@enemy.removed_piece.nil?
-      @enemy.pieces << @enemy.removed_piece
-      @enemy.removed_piece = nil
+    if !@enemy.removed_pieces.empty?
+      @enemy.pieces << @enemy.removed_pieces.pop
     end
+  end
+
+  def print_pieces
+    puts "#{@color.capitalize}'s pieces:"
+    @pieces.each {|piece| puts "#{piece}: #{piece.num_position}" }
+    print "\n"
+  end
+
+  def print_removed_pieces
+    puts "#{@color.capitalize}'s REMOVED pieces:"
+    unless @removed_pieces.empty?
+      @removed_pieces.each {|piece| puts "#{piece}: #{piece.num_position}" }
+    end
+    print "\n"
+  end
+
+  def print_removed_symbols
+    print "#{@color.capitalize}: "
+    unless @removed_pieces.empty?
+      @removed_pieces.each {|piece| print "#{piece.symbol}" }
+    end
+    print "\n"
   end
 
   def move_piece(start_location, end_location)
     # Move piece to new spot on board and update board
-    selected_piece = @board.select_piece(start_location)
+    selected_piece = select_piece(start_location)
+
     # Set selected piece's location to the end location
     selected_piece.num_position = end_location
-    @last_move = [start_location, end_location]
     @board.updateBoard
   end
 
   def occupied_self?(position)
-    if @board.contains_piece?(position)
-      if @board.grid[position[1]][position[0]].color == @color
-        return true
-      end
-    end
-    return false
+    self_loc_array = @pieces.map {|piece| piece.num_position }
+    self_loc_array.include?(position)
   end
 
   def occupied_enemy?(position)
-    if @board.contains_piece?(position)
-      if @board.grid[position[1]][position[0]].color == @enemy.color
-        return true
-      end
+    enemy_loc_array = @enemy.pieces.map {|piece| piece.num_position }
+    enemy_loc_array.include?(position)
+  end
+
+  def select_piece(position)
+    if occupied_self?(position)
+      selected_piece = @pieces.find {|piece| piece.num_position == position }
+      return selected_piece
+    else
+      puts "Can't select enemy's piece."
+      return
     end
-    return false
   end
 
 end

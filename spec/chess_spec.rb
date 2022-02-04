@@ -107,38 +107,84 @@ describe Player do
     end
   end
 
-  describe '#possibleMoves' do
+  describe '#total_moves_pre_check' do
     context 'when the game starts' do
+      fake_board = Board.new
+      fake_board.white.initialize_pieces
+      fake_board.black.initialize_pieces
+      fake_board.updateBoard
       it 'returns array of all possible moves' do
-        # test
-      end
-    end
-
-    context 'when the game is in the middle' do
-      it 'returns small array of all possible moves' do
-        # test
+        moves = fake_board.white.total_moves_pre_check
+        expect(moves).to match_array([[0, 5], [0, 5], [1, 5], [2, 5], [2, 5], [3, 5], [4, 5],
+                                      [5, 5], [5, 5], [6, 5], [7, 5], [7, 5]])
       end
     end
 
     context 'when the current player is in checkmate' do
-      it 'returns an empty array' do
-        # test
+      fake_board = Board.new
+      king = King.new(fake_board.white, [3,7])
+      enemy_queen = Queen.new(fake_board.black, [0,6])
+      enemy_rook = Rook.new(fake_board.black, [0,7])
+      pawn = WhitePawn.new(fake_board.white, [3,3])
+      fake_board.updateBoard
+      it 'returns something other than an empty array' do
+        moves = fake_board.white.total_moves_pre_check
+        expect(moves).to match_array([[2, 6], [2, 7], [3, 2], [3, 6], [4, 6], [4, 7]])
       end
     end
   end
 
+  describe '#total_moves_no_check' do
+    context 'when the game starts' do
+      fake_board = Board.new
+      fake_board.white.initialize_pieces
+      fake_board.black.initialize_pieces
+      fake_board.updateBoard
+      it 'returns array of all possible moves' do
+        moves = fake_board.white.total_moves_no_check
+        expect(moves).to match_array([[0, 5], [0, 5], [1, 5], [2, 5], [2, 5], [3, 5], [4, 5],
+          [5, 5], [5, 5], [6, 5], [7, 5], [7, 5]])
+      end
+    end
 
+    context 'when the current player is in checkmate' do
+      fake_board = Board.new
+      king = King.new(fake_board.white, [3,7])
+      enemy_queen = Queen.new(fake_board.black, [0,6])
+      enemy_rook = Rook.new(fake_board.black, [0,7])
+      pawn = WhitePawn.new(fake_board.white, [3,3])
+      fake_board.updateBoard
+      it 'returns an empty array' do
+        moves = fake_board.white.total_moves_no_check
+        expect(moves).to match_array([])
+      end
+    end
+  end
 
   describe '#choose_move' do
     context 'when the chose move is valid' do
+      fake_board = Board.new
+      fake_board.white.initialize_pieces
+      fake_board.black.initialize_pieces
+      fake_board.updateBoard
+      test_player = fake_board.white
       it 'returns the valid move in piece, location format' do
-        # test
+        allow(test_player).to receive(:get_input).and_return('c2-c3')
+        move = test_player.choose_move
+        expect(move).to match_array([[2,6], [2,5]])
       end
     end
 
     context 'when the move is not valid, then valid' do
+      fake_board = Board.new
+      fake_board.white.initialize_pieces
+      fake_board.black.initialize_pieces
+      fake_board.updateBoard
+      test_player = fake_board.white
       it 'requests the move twice before returning the correct move' do
-        # test
+        allow(test_player).to receive(:get_input).and_return('apple', 'c2-c3')
+        expect(test_player).to receive(:puts).with("Wrong Format. Format ex. a2-b4")
+        test_player.choose_move
       end
     end
   end
@@ -156,9 +202,9 @@ describe Player do
       pawn = WhitePawn.new(fake_board.white, [3,4])
       enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
-      it 'adds the opponents piece to their removed pieces array' do
+      it 'makes the opponents piece their removed piece variable' do
         fake_player.capture_opponent([1,2])
-        expect(fake_player.enemy.removed_piece).to eq(enemy_bishop)
+        expect(fake_player.enemy.removed_pieces).to eq([enemy_bishop])
       end
     end
 
@@ -169,8 +215,34 @@ describe Player do
       pawn = WhitePawn.new(fake_board.white, [3,4])
       enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
-      it 'adds the opponents piece to their removed pieces array' do
+      it 'deletes the opponents piece to reduce the count in their pieces array' do
         expect {fake_player.capture_opponent([1,2])}.to change {fake_player.enemy.pieces.length}.by(-1)
+      end
+    end
+
+    context 'when there is an opponent in the space' do
+      fake_board = Board.new
+      fake_player = fake_board.white
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
+      fake_board.updateBoard
+      it 'adds the opponents piece to reduce the count in their pieces array' do
+        fake_player.capture_opponent([1,2])
+        expect(fake_player.enemy.pieces).to match_array([])
+      end
+    end
+
+    context 'when there is an opponent in the space' do
+      fake_board = Board.new
+      fake_player = fake_board.white
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
+      fake_board.updateBoard
+      it 'does not change our pieces array' do
+        fake_player.capture_opponent([1,2])
+        expect(fake_player.pieces).to match_array([king, pawn])
       end
     end
 
@@ -208,6 +280,20 @@ describe Player do
     context 'when the position is not occupied by the enemy' do
       it 'returns false' do
         expect(fake_board.white.occupied_enemy?([1,2])).to be false
+      end
+    end
+
+    context 'when the position is occupied by the enemy' do
+      bishop = Bishop.new(fake_board.white, [3,4])
+      fake_board.updateBoard
+      it 'returns true' do
+        expect(fake_board.black.occupied_enemy?([3,4])).to be true
+      end
+    end
+
+    context 'when the position is not occupied by the enemy' do
+      it 'returns false' do
+        expect(fake_board.black.occupied_enemy?([1,2])).to be false
       end
     end
   end

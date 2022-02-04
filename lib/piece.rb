@@ -7,28 +7,47 @@ class Piece
     @player = player
     @possible_moves = []
     @num_position = position
-    @symbol = 'X'
     @char_position = charPosition(@num_position)
     @player.pieces << self
+    @moves = 0
   end
 
   attr_reader :symbol, :char_position, :possible_moves, :color
-  attr_accessor :num_position
+  attr_accessor :num_position, :moves
 
   def moves_no_check
     move_array = []
     move_array = moves_pre_check
     no_check_moves = []
-    move_array.each do |move|
+    @check_moves = []
+
+    move_array.each do |end_position|
       # Run through full move scenario
-      @player.capture_opponent(move)
-      @player.move_piece(@num_position, move)
-      if !@player.check?
-        no_check_moves << move
+      start_position = @num_position
+
+      need_to_reverse = false
+      # Run through move scenario
+      if @player.occupied_enemy?(end_position)
+        need_to_reverse = true
       end
+      @player.capture_opponent(end_position)
+      @player.move_piece(start_position, end_position)
+
+      # If in check, add to list so can notify user
+      # If not in check, add to list of possible moves
+      if !@player.check?
+        no_check_moves << end_position
+      else
+        @check_moves << end_position
+      end
+
       # Reverse move back to original
-      @player.move_piece(@player.last_move[1], @player.last_move[0])
-      @player.reverse_capture
+      @player.move_piece(end_position, start_position)
+
+      if need_to_reverse == true
+        @player.reverse_capture
+      end
+      
     end
 
     return no_check_moves
@@ -52,7 +71,12 @@ class Piece
 end
 
 class WhitePawn < Piece
-  @symbol = "\u265f"
+
+  def initialize(player, position)
+    super(player, position)
+    @symbol = "\u265f"
+  end
+
   ATTACK_MOVES = [[-1, -1], [1, -1]].freeze
   STRAIGHT_MOVE = [[0,-1]].freeze
 
@@ -77,7 +101,10 @@ class WhitePawn < Piece
 end
 
 class BlackPawn < Piece
-  @symbol = "\u2659"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = "\u2659"
+  end
   
   ATTACK_MOVES = [[-1, 1], [1, 1]].freeze
   STRAIGHT_MOVE = [[0, 1]].freeze
@@ -103,7 +130,11 @@ class BlackPawn < Piece
 end
 
 class Rook < Piece
-  @symbol = @color == 'white' ? "\u265c" : "\u2656"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = @color == 'white' ? "\u265c" : "\u2656"
+  end
+
   TRANSFORMATIONS = [[0,1], [0,-1], [-1,0], [1,0]].freeze
 
   def moves_pre_check
@@ -114,7 +145,11 @@ class Rook < Piece
 end
 
 class Knight < Piece
-  @symbol = @color == 'white' ? "\u265e" : "\u2658"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = @color == 'white' ? "\u265e" : "\u2658"
+  end
+  
   MOVES = [[1, 2], [-2, -1], [-1, 2], [2, -1], [1, -2], [-2, 1], [-1, -2], [2, 1]].freeze
 
   def moves_pre_check
@@ -127,7 +162,11 @@ class Knight < Piece
 end
 
 class Bishop < Piece
-  @symbol = @color == 'white' ? "\u265d" : "\u2657"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = @color == 'white' ? "\u265d" : "\u2657"
+  end
+  
   TRANSFORMATIONS = [[1,1], [1,-1], [-1,1], [-1,-1]].freeze
 
   def moves_pre_check
@@ -138,7 +177,11 @@ class Bishop < Piece
 end
 
 class Queen < Piece
-  @symbol = @color == 'white' ? "\u265b" : "\u2655"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = @color == 'white' ? "\u265b" : "\u2655"
+  end
+  
   TRANSFORMATIONS = [[1,1], [1,-1], [-1,1], [-1,-1], [0,1], [1,0], [0, -1], [-1, 0]].freeze
 
   def moves_pre_check
@@ -149,7 +192,11 @@ class Queen < Piece
 end
 
 class King < Piece
-  @symbol = @color == 'white' ? "\u265a" : "\u2654"
+  def initialize(player, position)
+    super(player, position)
+    @symbol = @color == 'white' ? "\u265a" : "\u2654"
+  end
+  
   MOVES = [[1,0], [1,1], [0,1], [-1,1], [-1,0], [-1,-1], [0,-1], [1,-1]].freeze
 
   def moves_pre_check

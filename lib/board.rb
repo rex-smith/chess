@@ -16,6 +16,7 @@ class Board
   attr_accessor :grid, :active_player, :active_enemy, :white, :black
 
   def displayBoard
+    updateBoard
     @grid.each_with_index do |row, index|
       print "#{-1*(index-8)} "
       row.each do |piece|
@@ -28,6 +29,8 @@ class Board
       print "\n"
     end
     print "   A  B  C  D  E  F  G  H\n"
+    @white.print_removed_symbols
+    @black.print_removed_symbols
     puts
   end
 
@@ -51,16 +54,12 @@ class Board
     position[0].between?(0,7) && position[1].between?(0,7)
   end
 
-
-
   def contains_piece?(position)
     if @grid[position[1]][position[0]].is_a? Piece
       return true
     end
     return false
   end
-
-
 
   def change_active
     if @active_player == @white
@@ -72,10 +71,5 @@ class Board
     end
   end
 
-  def select_piece(num_location)
-    white_selected = @white.pieces.select {|piece| piece.num_position == num_location }
-    black_selected = @black.pieces.select {|piece| piece.num_position == num_location }
-    selected_piece = white_selected + black_selected
-    return selected_piece.first
-  end
+
 end

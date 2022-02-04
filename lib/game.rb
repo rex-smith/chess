@@ -6,14 +6,37 @@ class Game
     @board = Board.new
   end
 
+  def choose_game_type
+    response = ''
+    loop do
+      puts "Would you like to load an old game? (Y/N)"
+      response = gets.chomp.downcase
+      if response == 'y' || response == 'n'
+        break
+      end
+      puts "Please enter Y or N"
+    end
+    response == 'y' ? load_game : new_game
+  end
+
+  def load_game
+    # Check if there is saved game
+    # If yes load game
+    # If no, tell players that, and then do new game
+  end
+
+  def new_game
+    @board.white.initialize_pieces
+    @board.black.initialize_pieces
+  end
+
   def play_game
     @board.updateBoard
-    @board.displayBoard
     until game_over? do
-      @board.updateBoard
       @board.displayBoard
       @board.active_player.play_turn
       @board.change_active
+      @board.updateBoard
     end
     end_game
   end
@@ -24,7 +47,7 @@ class Game
   
   def end_game
     if checkmate?
-      puts "Checkmate! #{@board.active_player} wins the game!"
+      puts "Checkmate! #{@board.active_enemy} wins the game!"
     elsif stalemate?
       puts "Stalemate!"
     end
@@ -33,7 +56,7 @@ class Game
   def checkmate?
     # Conditions: In Check
     # No possible moves
-    if @board.active_enemy.check? && @board.active_enemy.possible_moves.length == 0
+    if @board.active_player.check? && @board.active_player.total_moves_no_check.length == 0
       return true
     end
     return false
@@ -49,7 +72,7 @@ class Game
     # @board.active_enemy.pieces
 
     # Or Not in Check and no possible moves
-    if !@board.active_player.check? && @board.active_player.possible_moves.length == 0
+    if !@board.active_player.check? && @board.active_player.total_moves_no_check.length == 0
       return true
     end
     return false
