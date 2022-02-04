@@ -24,42 +24,42 @@ class Player
     if color == 'white'
       @pieces = 
       [
-        WhitePawn.new(self, [0,6], "\u265f", 'white'),
-        WhitePawn.new(self, [1,6], "\u265f", 'white'),
-        WhitePawn.new(self, [2,6], "\u265f", 'white'),
-        WhitePawn.new(self, [3,6], "\u265f", 'white'),
-        WhitePawn.new(self, [4,6], "\u265f", 'white'),
-        WhitePawn.new(self, [5,6], "\u265f", 'white'),
-        WhitePawn.new(self, [6,6], "\u265f", 'white'),
-        WhitePawn.new(self, [7,6], "\u265f", 'white'),
-        Rook.new(self, [0,7], "\u265c", 'white'),
-        Rook.new(self, [7,7], "\u265c", 'white'),
-        Knight.new(self, [1,7], "\u265e", 'white'),
-        Knight.new(self, [6,7], "\u265e", 'white'),
-        Bishop.new(self, [2,7], "\u265d", 'white'),
-        Bishop.new(self, [5,7], "\u265d", 'white'),
-        Queen.new(self, [3,7], "\u265b", 'white'),
-        King.new(self, [4,7], "\u265a", 'white')
+        WhitePawn.new(self, [0,6]),
+        WhitePawn.new(self, [1,6]),
+        WhitePawn.new(self, [2,6]),
+        WhitePawn.new(self, [3,6]),
+        WhitePawn.new(self, [4,6]),
+        WhitePawn.new(self, [5,6]),
+        WhitePawn.new(self, [6,6]),
+        WhitePawn.new(self, [7,6]),
+        Rook.new(self, [0,7]),
+        Rook.new(self, [7,7]),
+        Knight.new(self, [1,7]),
+        Knight.new(self, [6,7]),
+        Bishop.new(self, [2,7]),
+        Bishop.new(self, [5,7]),
+        Queen.new(self, [3,7]),
+        King.new(self, [4,7])
       ]
     else
       @pieces = 
       [
-      BlackPawn.new(self, [0,1], "\u2659", 'black'),
-      BlackPawn.new(self, [1,1], "\u2659", 'black'),
-      BlackPawn.new(self, [2,1], "\u2659", 'black'),
-      BlackPawn.new(self, [3,1], "\u2659", 'black'),
-      BlackPawn.new(self, [4,1], "\u2659", 'black'),
-      BlackPawn.new(self, [5,1], "\u2659", 'black'),
-      BlackPawn.new(self, [6,1], "\u2659", 'black'),
-      BlackPawn.new(self, [7,1], "\u2659", 'black'),
-      Rook.new(self, [0,0], "\u2656", 'black'),
-      Rook.new(self, [7,0], "\u2656", 'black'),
-      Knight.new(self, [1,0], "\u2658", 'black'),
-      Knight.new(self, [6,0], "\u2658", 'black'),
-      Bishop.new(self, [2,0], "\u2657", 'black'),
-      Bishop.new(self, [5,0], "\u2657", 'black'),
-      Queen.new(self, [3,0], "\u2655", 'black'),
-      King.new(self, [4,0], "\u2654", 'black')
+      BlackPawn.new(self, [0,1]),
+      BlackPawn.new(self, [1,1]),
+      BlackPawn.new(self, [2,1]),
+      BlackPawn.new(self, [3,1]),
+      BlackPawn.new(self, [4,1]),
+      BlackPawn.new(self, [5,1]),
+      BlackPawn.new(self, [6,1]),
+      BlackPawn.new(self, [7,1]),
+      Rook.new(self, [0,0]),
+      Rook.new(self, [7,0]),
+      Knight.new(self, [1,0]),
+      Knight.new(self, [6,0]),
+      Bishop.new(self, [2,0]),
+      Bishop.new(self, [5,0]),
+      Queen.new(self, [3,0]),
+      King.new(self, [4,0])
       ]
     end
   end

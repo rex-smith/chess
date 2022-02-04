@@ -2,12 +2,12 @@ require_relative 'space'
 
 class Piece
   include Space
-  def initialize(player, position, symbol, color)
-    @symbol = symbol
-    @color = color
+  def initialize(player, position)
+    @color = player.color
     @player = player
     @possible_moves = []
     @num_position = position
+    @symbol = 'X'
     @char_position = charPosition(@num_position)
     @player.pieces << self
   end
@@ -52,7 +52,7 @@ class Piece
 end
 
 class WhitePawn < Piece
-
+  @symbol = "\u265f"
   ATTACK_MOVES = [[-1, -1], [1, -1]].freeze
   STRAIGHT_MOVE = [[0,-1]].freeze
 
@@ -77,6 +77,7 @@ class WhitePawn < Piece
 end
 
 class BlackPawn < Piece
+  @symbol = "\u2659"
   
   ATTACK_MOVES = [[-1, 1], [1, 1]].freeze
   STRAIGHT_MOVE = [[0, 1]].freeze
@@ -102,6 +103,7 @@ class BlackPawn < Piece
 end
 
 class Rook < Piece
+  @symbol = @color == 'white' ? "\u265c" : "\u2656"
   TRANSFORMATIONS = [[0,1], [0,-1], [-1,0], [1,0]].freeze
 
   def moves_pre_check
@@ -112,6 +114,7 @@ class Rook < Piece
 end
 
 class Knight < Piece
+  @symbol = @color == 'white' ? "\u265e" : "\u2658"
   MOVES = [[1, 2], [-2, -1], [-1, 2], [2, -1], [1, -2], [-2, 1], [-1, -2], [2, 1]].freeze
 
   def moves_pre_check
@@ -124,6 +127,7 @@ class Knight < Piece
 end
 
 class Bishop < Piece
+  @symbol = @color == 'white' ? "\u265d" : "\u2657"
   TRANSFORMATIONS = [[1,1], [1,-1], [-1,1], [-1,-1]].freeze
 
   def moves_pre_check
@@ -134,6 +138,7 @@ class Bishop < Piece
 end
 
 class Queen < Piece
+  @symbol = @color == 'white' ? "\u265b" : "\u2655"
   TRANSFORMATIONS = [[1,1], [1,-1], [-1,1], [-1,-1], [0,1], [1,0], [0, -1], [-1, 0]].freeze
 
   def moves_pre_check
@@ -144,6 +149,7 @@ class Queen < Piece
 end
 
 class King < Piece
+  @symbol = @color == 'white' ? "\u265a" : "\u2654"
   MOVES = [[1,0], [1,1], [0,1], [-1,1], [-1,0], [-1,-1], [0,-1], [1,-1]].freeze
 
   def moves_pre_check

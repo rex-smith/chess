@@ -16,7 +16,7 @@ describe Board do
   describe '#select_piece' do
     context 'when a piece exists at that spot' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
+      king = King.new(fake_board.white, [4,5])
       fake_board.updateBoard
       it 'returns the selected piece object' do
         expect(fake_board.select_piece([4,5])).to eq(king)
@@ -51,7 +51,7 @@ describe Board do
     fake_board = Board.new
 
     context 'when the space does contain a piece' do
-      bishop = Bishop.new(fake_board.white, [3,4], "\u265f", 'white')
+      bishop = Bishop.new(fake_board.white, [3,4])
       fake_board.updateBoard
       it 'returns true' do
         expect(fake_board.contains_piece?([3,4])).to be true
@@ -87,8 +87,8 @@ describe Player do
     context 'when active player is in check on board' do
       fake_board = Board.new
       fake_player = fake_board.white
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
       it 'returns true' do
         expect(fake_player.check?).to be true
@@ -98,8 +98,8 @@ describe Player do
     context 'when active player is not in check' do
       fake_board = Board.new
       fake_player = fake_board.white
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [3,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      enemy_bishop = Bishop.new(fake_board.black, [3,2])
       fake_board.updateBoard
       it 'returns false' do
         expect(fake_player.check?).to be false
@@ -152,9 +152,9 @@ describe Player do
     context 'when there is an opponent in the space' do
       fake_board = Board.new
       fake_player = fake_board.white
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
       it 'adds the opponents piece to their removed pieces array' do
         fake_player.capture_opponent([1,2])
@@ -165,9 +165,9 @@ describe Player do
     context 'when there is an opponent in the space' do
       fake_board = Board.new
       fake_player = fake_board.white
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
       it 'adds the opponents piece to their removed pieces array' do
         expect {fake_player.capture_opponent([1,2])}.to change {fake_player.enemy.pieces.length}.by(-1)
@@ -177,9 +177,9 @@ describe Player do
     context 'when there is no opponent in the space' do
       fake_board = Board.new
       fake_player = fake_board.white
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,1], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,1])
       fake_board.updateBoard
       it 'does nothing' do
         expect {fake_player.capture_opponent([1,2])}.not_to change {fake_player.enemy.pieces.length}
@@ -198,7 +198,7 @@ describe Player do
   describe '#occupied_enemy?' do
     fake_board = Board.new
     context 'when the position is occupied by the enemy' do
-      bishop = Bishop.new(fake_board.black, [3,4], "\u265f", 'black')
+      bishop = Bishop.new(fake_board.black, [3,4])
       fake_board.updateBoard
       it 'returns true' do
         expect(fake_board.white.occupied_enemy?([3,4])).to be true
@@ -221,7 +221,7 @@ describe Player do
     end
 
     context 'when it is occupied by yourself' do
-      bishop = Bishop.new(fake_board.white, [3,4], "\u265f", 'white')
+      bishop = Bishop.new(fake_board.white, [3,4])
       fake_board.updateBoard
       it 'returns true' do
         expect(fake_board.white.occupied_self?([3,4])).to be true
@@ -236,7 +236,7 @@ describe WhitePawn do
   describe '#moves_pre_check' do
     context 'when not blocked and no enemies to capture' do
       fake_board = Board.new
-      pawn = WhitePawn.new(fake_board.white, [1,6], "\u265f", 'white')
+      pawn = WhitePawn.new(fake_board.white, [1,6])
       it 'returns one space' do
         expect(pawn.moves_pre_check[0]).to eq([1,5])
       end
@@ -244,9 +244,9 @@ describe WhitePawn do
 
     context 'when not blocked and straight would put in check' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
       it 'returns one space' do
         potential_moves = pawn.moves_pre_check
@@ -256,9 +256,9 @@ describe WhitePawn do
 
     context 'when blocked by enemy' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [3,3], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [3,3])
       fake_board.updateBoard
       it 'returns empty array' do
         potential_moves = pawn.moves_pre_check
@@ -268,9 +268,9 @@ describe WhitePawn do
 
     context 'when blocked by self' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.white, [3,3], "\u2657", 'white')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns empty array' do
         potential_moves = pawn.moves_pre_check
@@ -280,10 +280,10 @@ describe WhitePawn do
 
     context 'when ahead is empty, and corners are occupied by enemy' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [2,3], "\u2657", 'black')
-      enemy_bishop_2 = Bishop.new(fake_board.black, [4,3], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [2,3])
+      enemy_bishop_2 = Bishop.new(fake_board.black, [4,3])
       fake_board.updateBoard
 
       it 'returns array with three moves' do
@@ -296,8 +296,8 @@ describe WhitePawn do
   describe '#moves_no_check' do
     context 'when not blocked' do
       fake_board = Board.new
-      pawn = WhitePawn.new(fake_board.white, [1,6], "\u265f", 'white')
-      king = King.new(fake_board.white, [4,7], "\u265a", 'white')
+      pawn = WhitePawn.new(fake_board.white, [1,6])
+      king = King.new(fake_board.white, [4,7])
       fake_board.updateBoard
       it 'returns one space' do
         expect(pawn.moves_no_check).to eq([[1,5]])
@@ -306,9 +306,9 @@ describe WhitePawn do
 
     context 'when not blocked but move would put in check' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [4,5], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [4,5])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
+      enemy_bishop = Bishop.new(fake_board.black, [1,2])
       fake_board.updateBoard
       it 'returns empty array' do
         expect(pawn.moves_no_check).to eq([])
@@ -321,7 +321,7 @@ describe Rook do
   describe '#moves_pre_check' do
     context 'when all moves are good' do
       fake_board = Board.new
-      rook = Rook.new(fake_board.white, [3,3], "\u265a", 'white')
+      rook = Rook.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns all spaces up and across' do
         move_array = rook.moves_pre_check
@@ -332,8 +332,8 @@ describe Rook do
 
     context 'when blocked by enemy' do
       fake_board = Board.new
-      rook = Rook.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [3,5], "\u2657", 'black')
+      rook = Rook.new(fake_board.white, [3,3])
+      enemy_bishop = Bishop.new(fake_board.black, [3,5])
       fake_board.updateBoard
       it 'returns all moves not blocked by enemy' do
         move_array = rook.moves_pre_check
@@ -346,7 +346,7 @@ describe Rook do
   describe '#moves_no_check' do
     context 'when no move would put in check' do
       fake_board = Board.new
-      rook = Rook.new(fake_board.white, [3,3], "\u265a", 'white')
+      rook = Rook.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns all moves' do
         move_array = rook.moves_pre_check
@@ -357,9 +357,9 @@ describe Rook do
 
     context 'when moving up would put in check' do
       fake_board = Board.new
-      rook = Rook.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_queen = Queen.new(fake_board.black, [0,3], "\u2657", 'black')
-      king = King.new(fake_board.white, [6,3], "\u265a", 'white')
+      rook = Rook.new(fake_board.white, [3,3])
+      enemy_queen = Queen.new(fake_board.black, [0,3])
+      king = King.new(fake_board.white, [6,3])
       fake_board.updateBoard
       it 'returns only lateral moves' do
         move_array = rook.moves_no_check
@@ -373,7 +373,7 @@ describe Knight do
   describe '#moves_pre_check' do
     context 'when all moves are good' do
       fake_board = Board.new
-      knight = Knight.new(fake_board.white, [3,3], "\u265a", 'white')
+      knight = Knight.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'shows all moves' do
         move_array = knight.moves_pre_check
@@ -383,8 +383,8 @@ describe Knight do
 
     context 'when blocked by self' do
       fake_board = Board.new
-      knight = Knight.new(fake_board.white, [3,3], "\u265a", 'white')
-      king = King.new(fake_board.white, [5,2], "\u265a", 'white')
+      knight = Knight.new(fake_board.white, [3,3])
+      king = King.new(fake_board.white, [5,2])
       fake_board.updateBoard
       it 'shows all moves except blocked one' do
         move_array = knight.moves_pre_check
@@ -396,8 +396,8 @@ describe Knight do
   describe '#moves_no_check' do
     context 'when all moves are good' do
       fake_board = Board.new
-      knight = Knight.new(fake_board.white, [3,3], "\u265a", 'white')
-      king = King.new(fake_board.white, [5,3], "\u265a", 'white')
+      knight = Knight.new(fake_board.white, [3,3])
+      king = King.new(fake_board.white, [5,3])
       fake_board.updateBoard
       it 'returns all moves' do
         move_array = knight.moves_no_check
@@ -407,9 +407,9 @@ describe Knight do
 
     context 'when moving at all would put into check' do
       fake_board = Board.new
-      knight = Knight.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_rook = Rook.new(fake_board.black, [1,3], "\u265a", 'black')
-      king = King.new(fake_board.white, [5,3], "\u265a", 'white')
+      knight = Knight.new(fake_board.white, [3,3])
+      enemy_rook = Rook.new(fake_board.black, [1,3])
+      king = King.new(fake_board.white, [5,3])
       fake_board.updateBoard
       it 'returns an empty array' do
         move_array = knight.moves_no_check
@@ -424,7 +424,7 @@ describe Bishop do
     context 'when board is completely open' do
       it 'returns all spaces in diagonals on board from space' do
         fake_board = Board.new
-        bishop = Bishop.new(fake_board.white, [3,3], "\u265d", 'white') 
+        bishop = Bishop.new(fake_board.white, [3,3]) 
         move_array = bishop.moves_pre_check
         expect(move_array).to match_array([[0,0], [1,1], [2,2], [4,4], [5,5], [6,6], [7,7],
                                           [6,0], [5,1], [4,2], [2,4], [1,5], [0,6]])
@@ -434,9 +434,9 @@ describe Bishop do
     context 'when can capture' do
       it 'returns all spaces in diagonals on board from space until capture spot' do
         fake_board = Board.new
-        bishop = Bishop.new(fake_board.white, [1,2], "\u265d", 'white') 
-        enemy_king = King.new(fake_board.black, [4,5], "\u2659", 'black')
-        king = King.new(fake_board.white, [0,6], "\u265a", 'white')
+        bishop = Bishop.new(fake_board.white, [1,2]) 
+        enemy_king = King.new(fake_board.black, [4,5])
+        king = King.new(fake_board.white, [0,6])
         fake_board.updateBoard
         move_array = bishop.moves_pre_check
         expect(move_array).to match_array([[2, 3], [3, 4], [2, 1], [4,5], [3, 0], [0, 3], [0, 1]])
@@ -448,9 +448,9 @@ describe Bishop do
     context 'when leaving the current position would ensure check unless you went diagonal' do
       it 'returns only moves on diagonal to attacking bishop' do
         fake_board = Board.new
-        bishop = Bishop.new(fake_board.white, [3,3], "\u265d", 'white')
-        enemy_bishop =  Bishop.new(fake_board.black, [6,0], "\u2657", 'black')
-        king = King.new(fake_board.white, [0,6], "\u265a", 'white')
+        bishop = Bishop.new(fake_board.white, [3,3])
+        enemy_bishop =  Bishop.new(fake_board.black, [6,0])
+        king = King.new(fake_board.white, [0,6])
         fake_board.updateBoard
         move_array = bishop.moves_no_check
         expect(move_array).to match_array([[6,0],[5,1],[4,2],[2,4],[1,5]])
@@ -463,7 +463,7 @@ describe Queen do
   describe '#moves_pre_check' do
     context 'when nothing is blocking' do
       fake_board = Board.new
-      queen = Queen.new(fake_board.white, [3,3], "\u265a", 'white')
+      queen = Queen.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns all spaces possible' do
         move_array = queen.moves_pre_check
@@ -476,8 +476,8 @@ describe Queen do
 
     context 'when being blocked by own team' do
       fake_board = Board.new
-      queen = Queen.new(fake_board.white, [3,3], "\u265a", 'white')
-      bishop = Bishop.new(fake_board.white, [3,4], "\u265d", 'white')
+      queen = Queen.new(fake_board.white, [3,3])
+      bishop = Bishop.new(fake_board.white, [3,4])
       fake_board.updateBoard
       it 'returns everything not blocked' do
         move_array = queen.moves_pre_check
@@ -489,8 +489,8 @@ describe Queen do
 
     context 'when blocked by opponent' do
       fake_board = Board.new
-      queen = Queen.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [3,4], "\u265d", 'black')
+      queen = Queen.new(fake_board.white, [3,3])
+      enemy_bishop = Bishop.new(fake_board.black, [3,4])
       fake_board.updateBoard
       it 'returns blocked space (for capture) and all not blocked' do
         move_array = queen.moves_pre_check
@@ -504,8 +504,8 @@ describe Queen do
   describe '#moves_no_check' do
     context 'when all moves are good' do
       fake_board = Board.new
-      queen = Queen.new(fake_board.white, [3,3], "\u265a", 'white')
-      king = King.new(fake_board.white, [0,7], "\u265a", 'white')
+      queen = Queen.new(fake_board.white, [3,3])
+      king = King.new(fake_board.white, [0,7])
       fake_board.updateBoard
       it 'returns all moves' do
         move_array = queen.moves_no_check
@@ -518,9 +518,9 @@ describe Queen do
 
     context 'when any non diagonal move puts in check' do
       fake_board = Board.new
-      queen = Queen.new(fake_board.white, [3,3], "\u265a", 'white')
-      king = King.new(fake_board.white, [5,5], "\u265a", 'white')
-      enemy_bishop = Bishop.new(fake_board.black, [1,1], "\u265d", 'black')
+      queen = Queen.new(fake_board.white, [3,3])
+      king = King.new(fake_board.white, [5,5])
+      enemy_bishop = Bishop.new(fake_board.black, [1,1])
       fake_board.updateBoard
       it 'returns only diagonal moves' do
         move_array = queen.moves_no_check
@@ -534,7 +534,7 @@ describe King do
   describe '#moves_pre_check' do
     context 'when all moves available' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [3,3], "\u265a", 'white')
+      king = King.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns array of all moves' do
         move_array = king.moves_pre_check
@@ -544,8 +544,8 @@ describe King do
 
     context 'when same color piece is blocking' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [3,3], "\u265a", 'white')
-      pawn = WhitePawn.new(fake_board.white, [3,4], "\u265f", 'white')
+      king = King.new(fake_board.white, [3,3])
+      pawn = WhitePawn.new(fake_board.white, [3,4])
       fake_board.updateBoard
       it 'returns all spaces but one' do
         move_array = king.moves_pre_check
@@ -555,8 +555,8 @@ describe King do
 
     context 'when there is an enemy to capture' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_bishop =  Bishop.new(fake_board.black, [2,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [3,3])
+      enemy_bishop =  Bishop.new(fake_board.black, [2,2])
       fake_board.updateBoard
       it 'returns an array of all moves' do
         move_array = king.moves_pre_check
@@ -568,7 +568,7 @@ describe King do
   describe '#moves_no_check' do
     context 'when no moves put into check' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [3,3], "\u265a", 'white')
+      king = King.new(fake_board.white, [3,3])
       fake_board.updateBoard
       it 'returns all moves' do
         move_array = king.moves_no_check
@@ -578,8 +578,8 @@ describe King do
 
     context 'when one move puts it into check' do
       fake_board = Board.new
-      king = King.new(fake_board.white, [3,3], "\u265a", 'white')
-      enemy_bishop =  Bishop.new(fake_board.black, [2,2], "\u2657", 'black')
+      king = King.new(fake_board.white, [3,3])
+      enemy_bishop =  Bishop.new(fake_board.black, [2,2])
       fake_board.updateBoard
       it 'returns all moves but one' do
         move_array = king.moves_no_check
