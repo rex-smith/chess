@@ -98,7 +98,14 @@ class WhitePawn < Piece
   def moves_pre_check
     move_array = []
     attack_move_array = []
-    move_array = STRAIGHT_MOVE.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
+
+    if @moves = 0
+      pawn_moves = STRAIGHT_MOVE + [[0,-2]]
+    else
+      pawn_moves = STRAIGHT_MOVE
+    end
+
+    move_array = pawn_moves.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .keep_if {|location| @player.board.onBoard?(location) }
                  .reject {|location| @player.occupied_self?(location) }
                  .reject {|location| @player.occupied_enemy?(location) }
@@ -127,7 +134,14 @@ class BlackPawn < Piece
   def moves_pre_check
     move_array = []
     attack_move_array = []
-    move_array = STRAIGHT_MOVE.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
+
+    if @moves = 0
+      pawn_moves = STRAIGHT_MOVE + [[0,2]]
+    else
+      pawn_moves = STRAIGHT_MOVE
+    end
+
+    move_array = pawn_moves.map {|move| [@num_position[0] + move[0], @num_position[1] + move[1]] }
                  .keep_if {|location| @player.board.onBoard?(location) }
                  .reject {|location| @player.occupied_self?(location) }
                  .reject {|location| @player.occupied_enemy?(location) }

@@ -121,6 +121,8 @@ class Player
         move = get_input
         if move == 'save'
           @board.save_game
+        elsif move == 'quit'
+          abort("#{color.capitalize} concedes defeat!")
         end
 
         if valid_input?(move)
@@ -153,7 +155,7 @@ class Player
   end
 
   def get_input
-    puts "#{@color.capitalize}, please enter in a move (ex. a2-b5) or enter 'save'"
+    puts "#{@color.capitalize}, please enter in a move (ex. a2-b5) \nor enter 'save' or 'quit'"
     move = gets.chomp.downcase
     move
   end
@@ -179,6 +181,17 @@ class Player
     @turns += 1
     piece = select_piece(new_position)
     piece.moves += 1
+    queen_pawn(piece)
+  end
+
+  def queen_pawn(moved_piece)
+    if moved_piece.instance_of?(BlackPawn) || moved_piece.instance_of?(WhitePawn)
+      if moved_piece.num_position[1] == 7 || moved_piece.num_position[1] == 0
+        Queen.new(self, moved_piece.num_position)
+        @pieces.delete_if {|piece| piece == moved_piece}
+        @board.updateBoard
+      end
+    end
   end
 
   def capture_opponent(position)
