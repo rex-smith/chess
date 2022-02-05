@@ -5,8 +5,8 @@ require 'json'
 
 class Player
   include Space
-  extend SaveLoad
-  
+  include SaveLoad
+
   def initialize(color, board, pieces=[], turns=0, removed_pieces=[])
     @board = board
     @pieces = pieces

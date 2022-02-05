@@ -3,6 +3,7 @@ require_relative 'player'
 require_relative 'save_load'
 
 class Game
+  include SaveLoad
   def initialize
     
   end
