@@ -1,8 +1,13 @@
 require_relative 'player'
 require_relative 'space'
+require_relative 'save_load'
+require 'yaml'
+require 'json'
 
 class Board
   include Space
+  extend SaveLoad
+
   def initialize(white=Player.new('white', self),black=Player.new('black', self))
     @white = white
     @black = black
@@ -17,26 +22,6 @@ class Board
   def set_enemies
     @white.enemy = @black
     @black.enemy = @white
-  end
-
-
-  def to_json
-    JSON.dump ({
-      :white => @white.to_json,
-      :black => @black.to_json,
-    })
-  end
-
-  def self.from_json(string)
-    data = JSON.load string
-    self.new(data['white'], data['black'])
-  end
-
-  def save_game
-    saved_game = File.open("saved_game.txt", 'w')
-    saved_game.puts self.to_json
-    saved_game.close
-    abort("Game saved!")
   end
 
   def displayBoard

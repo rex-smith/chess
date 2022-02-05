@@ -1,8 +1,12 @@
 require_relative 'piece'
 require_relative 'space'
+require_relative 'save_load'
+require 'json'
 
 class Player
   include Space
+  extend SaveLoad
+  
   def initialize(color, board, pieces=[], turns=0, removed_pieces=[])
     @board = board
     @pieces = pieces
@@ -17,22 +21,6 @@ class Player
   MOVE_FORMAT = /[a-hA-H][1-8]\-[a-hA-H][1-8]/
   attr_accessor :board, :possible_moves_no_check, :pieces, :color, :possible_moves_pre_check,
                 :enemy, :removed_pieces, :turns
-
-  def to_json
-    JSON.dump ({
-      :color => @color,
-      :board => @board,
-      :pieces => @pieces.to_json,
-      :turns => @turns,
-      :removed_pieces => @removed_pieces.to_json
-    })
-  end
-
-  def self.from_json(string)
-    data = JSON.load string
-    self.new(data['color'], data['board'], data['pieces'], data['turns'], data['removed_pieces'])
-  end
-
 
   def initialize_pieces
     if @color == 'white'
@@ -120,7 +108,7 @@ class Player
       loop do 
         move = get_input
         if move == 'save'
-          @board.save_game
+          save_game(@board)
         elsif move == 'quit'
           abort("#{color.capitalize} concedes defeat!")
         end

@@ -1,4 +1,5 @@
 require_relative 'space'
+require 'json'
 
 class Piece
   include Space
@@ -70,19 +71,6 @@ class Piece
     return move_array
   end
 
-  def to_json
-    JSON.dump ({
-      :player => @player,
-      :position => @num_position,
-      :moves => @moves,
-    })
-  end
-
-  def self.from_json(string)
-    data = JSON.load string
-    self.new(data['player'], data['position'], data['moves'])
-  end
-
 end
 
 class WhitePawn < Piece
@@ -99,7 +87,7 @@ class WhitePawn < Piece
     move_array = []
     attack_move_array = []
 
-    if @moves = 0
+    if @moves == 0
       pawn_moves = STRAIGHT_MOVE + [[0,-2]]
     else
       pawn_moves = STRAIGHT_MOVE
@@ -135,7 +123,7 @@ class BlackPawn < Piece
     move_array = []
     attack_move_array = []
 
-    if @moves = 0
+    if @moves == 0
       pawn_moves = STRAIGHT_MOVE + [[0,2]]
     else
       pawn_moves = STRAIGHT_MOVE

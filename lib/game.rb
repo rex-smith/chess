@@ -1,6 +1,6 @@
 require_relative 'board'
 require_relative 'player'
-require 'json'
+require_relative 'save_load'
 
 class Game
   def initialize
@@ -18,17 +18,6 @@ class Game
       puts "Please enter Y or N"
     end
     response == 'y' ? load_game : new_game
-  end
-
-  def load_game
-    if File.exist? "saved_game.txt"
-      @game_file = File.open("saved_game.txt", 'r')
-      @board = Board.from_json(@game_file)
-    else
-      puts "No game saved! Let's start a new game!"
-      puts "New game starting!"
-      new_game
-    end
   end
 
   def new_game
