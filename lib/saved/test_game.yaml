@@ -1,0 +1,614 @@
+--- &1 !ruby/object:Board
+white: &2 !ruby/object:Player
+  board: *1
+  pieces:
+  - &21 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 0
+    - 6
+    char_position: a2
+    moves: 0
+    symbol: "♟"
+  - &22 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 1
+    - 6
+    char_position: b2
+    moves: 0
+    symbol: "♟"
+  - &23 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 2
+    - 6
+    char_position: c2
+    moves: 0
+    symbol: "♟"
+  - &20 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 3
+    - 5
+    char_position: d2
+    moves: 1
+    symbol: "♟"
+  - &24 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 4
+    - 6
+    char_position: e2
+    moves: 0
+    symbol: "♟"
+  - &25 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 5
+    - 6
+    char_position: f2
+    moves: 0
+    symbol: "♟"
+  - &26 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 6
+    - 6
+    char_position: g2
+    moves: 0
+    symbol: "♟"
+  - &27 !ruby/object:WhitePawn
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 7
+    - 6
+    char_position: h2
+    moves: 0
+    symbol: "♟"
+  - &28 !ruby/object:Rook
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 0
+    - 7
+    char_position: a1
+    moves: 0
+    symbol: "♜"
+  - &35 !ruby/object:Rook
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 7
+    - 7
+    char_position: h1
+    moves: 0
+    symbol: "♜"
+  - &29 !ruby/object:Knight
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 1
+    - 7
+    char_position: b1
+    moves: 0
+    symbol: "♞"
+  - &34 !ruby/object:Knight
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 6
+    - 7
+    char_position: g1
+    moves: 0
+    symbol: "♞"
+  - &30 !ruby/object:Bishop
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 2
+    - 7
+    char_position: c1
+    moves: 0
+    symbol: "♝"
+  - &33 !ruby/object:Bishop
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 5
+    - 7
+    char_position: f1
+    moves: 0
+    symbol: "♝"
+  - &31 !ruby/object:Queen
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 3
+    - 7
+    char_position: d1
+    moves: 0
+    symbol: "♛"
+  - &32 !ruby/object:King
+    color: white
+    player: *2
+    possible_moves: []
+    num_position:
+    - 4
+    - 7
+    char_position: e1
+    moves: 0
+    symbol: "♚"
+  removed_pieces: []
+  color: white
+  enemy: &3 !ruby/object:Player
+    board: *1
+    pieces:
+    - &12 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 0
+      - 1
+      char_position: a7
+      moves: 0
+      symbol: "♙"
+    - &13 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 1
+      - 1
+      char_position: b7
+      moves: 0
+      symbol: "♙"
+    - &14 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 2
+      - 1
+      char_position: c7
+      moves: 0
+      symbol: "♙"
+    - &15 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 3
+      - 1
+      char_position: d7
+      moves: 0
+      symbol: "♙"
+    - &19 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 4
+      - 2
+      char_position: e7
+      moves: 1
+      symbol: "♙"
+    - &16 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 5
+      - 1
+      char_position: f7
+      moves: 0
+      symbol: "♙"
+    - &17 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 6
+      - 1
+      char_position: g7
+      moves: 0
+      symbol: "♙"
+    - &18 !ruby/object:BlackPawn
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 7
+      - 1
+      char_position: h7
+      moves: 0
+      symbol: "♙"
+    - &4 !ruby/object:Rook
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 0
+      - 0
+      char_position: a8
+      moves: 0
+      symbol: "♖"
+    - &11 !ruby/object:Rook
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 7
+      - 0
+      char_position: h8
+      moves: 0
+      symbol: "♖"
+    - &5 !ruby/object:Knight
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 1
+      - 0
+      char_position: b8
+      moves: 0
+      symbol: "♘"
+    - &10 !ruby/object:Knight
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 6
+      - 0
+      char_position: g8
+      moves: 0
+      symbol: "♘"
+    - &6 !ruby/object:Bishop
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 2
+      - 0
+      char_position: c8
+      moves: 0
+      symbol: "♗"
+    - &9 !ruby/object:Bishop
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 5
+      - 0
+      char_position: f8
+      moves: 0
+      symbol: "♗"
+    - &7 !ruby/object:Queen
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 3
+      - 0
+      char_position: d8
+      moves: 0
+      symbol: "♕"
+    - &8 !ruby/object:King
+      color: black
+      player: *3
+      possible_moves: []
+      num_position:
+      - 4
+      - 0
+      char_position: e8
+      moves: 0
+      symbol: "♔"
+    removed_pieces: []
+    color: black
+    enemy: *2
+    possible_moves_no_check:
+    - - 0
+      - 2
+    - - 0
+      - 3
+    - - 1
+      - 2
+    - - 1
+      - 3
+    - - 2
+      - 2
+    - - 2
+      - 3
+    - - 3
+      - 2
+    - - 3
+      - 3
+    - - 4
+      - 2
+    - - 4
+      - 3
+    - - 5
+      - 2
+    - - 5
+      - 3
+    - - 6
+      - 2
+    - - 6
+      - 3
+    - - 7
+      - 2
+    - - 7
+      - 3
+    - - 2
+      - 2
+    - - 0
+      - 2
+    - - 7
+      - 2
+    - - 5
+      - 2
+    possible_moves_pre_check:
+    - - 0
+      - 2
+    - - 0
+      - 3
+    - - 1
+      - 2
+    - - 1
+      - 3
+    - - 2
+      - 2
+    - - 2
+      - 3
+    - - 3
+      - 2
+    - - 3
+      - 3
+    - - 4
+      - 3
+    - - 5
+      - 2
+    - - 5
+      - 3
+    - - 6
+      - 2
+    - - 6
+      - 3
+    - - 7
+      - 2
+    - - 7
+      - 3
+    - - 2
+      - 2
+    - - 0
+      - 2
+    - - 7
+      - 2
+    - - 5
+      - 2
+    - - 4
+      - 1
+    - - 4
+      - 1
+    - - 3
+      - 2
+    - - 2
+      - 3
+    - - 1
+      - 4
+    - - 0
+      - 5
+    - - 4
+      - 1
+    - - 5
+      - 2
+    - - 6
+      - 3
+    - - 7
+      - 4
+    - - 4
+      - 1
+    turns: 1
+  possible_moves_no_check:
+  - - 0
+    - 5
+  - - 0
+    - 4
+  - - 1
+    - 5
+  - - 1
+    - 4
+  - - 2
+    - 5
+  - - 2
+    - 4
+  - - 3
+    - 4
+  - - 4
+    - 5
+  - - 4
+    - 4
+  - - 5
+    - 5
+  - - 5
+    - 4
+  - - 6
+    - 5
+  - - 6
+    - 4
+  - - 7
+    - 5
+  - - 7
+    - 4
+  - - 3
+    - 6
+  - - 2
+    - 5
+  - - 0
+    - 5
+  - - 7
+    - 5
+  - - 5
+    - 5
+  - - 3
+    - 6
+  - - 4
+    - 5
+  - - 5
+    - 4
+  - - 6
+    - 3
+  - - 7
+    - 2
+  - - 3
+    - 6
+  - - 3
+    - 6
+  possible_moves_pre_check:
+  - - 0
+    - 5
+  - - 0
+    - 4
+  - - 1
+    - 5
+  - - 1
+    - 4
+  - - 2
+    - 5
+  - - 2
+    - 4
+  - - 3
+    - 4
+  - - 4
+    - 5
+  - - 4
+    - 4
+  - - 5
+    - 5
+  - - 5
+    - 4
+  - - 6
+    - 5
+  - - 6
+    - 4
+  - - 7
+    - 5
+  - - 7
+    - 4
+  - - 3
+    - 6
+  - - 2
+    - 5
+  - - 0
+    - 5
+  - - 7
+    - 5
+  - - 5
+    - 5
+  - - 3
+    - 6
+  - - 4
+    - 5
+  - - 5
+    - 4
+  - - 6
+    - 3
+  - - 7
+    - 2
+  - - 3
+    - 6
+  - - 3
+    - 6
+  turns: 1
+black: *3
+active_player: *2
+active_enemy: *3
+grid:
+- - *4
+  - *5
+  - *6
+  - *7
+  - *8
+  - *9
+  - *10
+  - *11
+- - *12
+  - *13
+  - *14
+  - *15
+  - " "
+  - *16
+  - *17
+  - *18
+- - " "
+  - " "
+  - " "
+  - " "
+  - *19
+  - " "
+  - " "
+  - " "
+- - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+- - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+  - " "
+- - " "
+  - " "
+  - " "
+  - *20
+  - " "
+  - " "
+  - " "
+  - " "
+- - *21
+  - *22
+  - *23
+  - " "
+  - *24
+  - *25
+  - *26
+  - *27
+- - *28
+  - *29
+  - *30
+  - *31
+  - *32
+  - *33
+  - *34
+  - *35

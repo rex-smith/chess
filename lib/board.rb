@@ -1,12 +1,15 @@
 require_relative 'player'
 require_relative 'space'
 require_relative 'save_load'
+require_relative 'escape_sequences'
 require 'yaml'
 require 'json'
 
 class Board
   include Space
   extend SaveLoad
+  include EscapeSequences
+
 
   def initialize(white=Player.new('white', self),black=Player.new('black', self))
     @white = white

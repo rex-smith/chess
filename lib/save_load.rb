@@ -8,6 +8,7 @@ module SaveLoad
 
     dump = YAML.dump(current_game)
     File.open(File.join(Dir.pwd, "/saved/#{filename}.yaml"), 'w') { |file| file.write dump }
+    abort('Game saved!')
   end
 
   def prompt_name
@@ -40,6 +41,7 @@ module SaveLoad
     saved = File.open(File.join(Dir.pwd, filename), 'r')
     loaded_game = YAML.load(saved)
     saved.close
+    p loaded_game.class
     loaded_game
   end
 

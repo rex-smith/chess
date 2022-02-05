@@ -1,9 +1,12 @@
 require_relative 'board'
 require_relative 'player'
 require_relative 'save_load'
+require_relative 'escape_sequences'
 
 class Game
   include SaveLoad
+  include EscapeSequences
+
   def initialize
     
   end
@@ -18,7 +21,11 @@ class Game
       end
       puts "Please enter Y or N"
     end
-    response == 'y' ? load_game : new_game
+    response == 'y' ? load_board : new_game
+  end
+
+  def load_board
+    @board = load_game
   end
 
   def new_game
